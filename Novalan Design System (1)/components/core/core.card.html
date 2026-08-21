@@ -1,0 +1,26 @@
+<!-- @dsCard group="Components" viewport="700x330" name="Core" subtitle="Buttons, icon buttons, tags, badges, cards" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--surface-page);padding:22px 26px}.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.stack{display:grid;gap:18px}.cap{font:var(--type-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-muted)}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const NV=window.NovalanDesignSystem_054783;
+const {Button,IconButton,Card,Badge,Tag,Icon}=NV;
+function Demo(){const [sel,setSel]=React.useState("lino");return <div className="stack">
+<div className="row"><Button>Agregar a la bolsa</Button><Button variant="secondary" iconRight={<Icon name="arrow-right"/>}>Ver colección</Button><Button variant="accent">Solicitar muestra</Button><Button variant="ghost">Cancelar</Button><Button variant="link" size="sm">Guía de cuidado</Button></div>
+<div className="row"><Button size="sm">Small</Button><Button size="md">Medium</Button><Button size="lg">Large</Button><Button disabled>Agotado</Button>
+<IconButton icon={<Icon name="search" size={18}/>} label="Buscar"/><IconButton variant="outline" icon={<Icon name="heart" size={18}/>} label="Guardar"/><IconButton variant="solid" icon={<Icon name="shopping-bag" size={18}/>} label="Bolsa"/></div>
+<div className="row">{["lino","algodón","lana"].map(t=><Tag key={t} selected={sel===t} onClick={()=>setSel(t)}>{t}</Tag>)}<Tag tone="accent">240 g/m²</Tag><Tag removable onRemove={()=>{}}>Crudo</Tag>
+<Badge tone="success" dot>En existencia</Badge><Badge tone="warning">En producción</Badge><Badge tone="danger">Agotado</Badge><Badge tone="ink">Lote 0042</Badge><Badge tone="accent">Nuevo</Badge></div>
+<div className="row" style={{alignItems:"stretch"}}>
+<Card padding="sm" style={{width:180}}><div className="cap">Hairline</div><div style={{font:"var(--type-h4)"}}>Camisa Ombré</div></Card>
+<Card variant="solid" padding="sm" style={{width:180}}><div className="cap">Solid</div><div style={{font:"var(--type-h4)"}}>Manta Telar</div></Card>
+<Card variant="sunken" padding="sm" style={{width:180}}><div className="cap">Sunken</div><div style={{font:"var(--type-h4)"}}>Lino 240</div></Card>
+<Card variant="ink" padding="sm" style={{width:180}}><div className="cap" style={{color:"var(--nv-khaki-300)"}}>Ink</div><div style={{font:"var(--type-h4)"}}>Otoño 2026</div></Card>
+</div></div>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script></body></html>

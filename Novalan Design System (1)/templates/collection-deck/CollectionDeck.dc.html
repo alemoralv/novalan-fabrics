@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Collection deck" description="Six-slide Novalan deck: title, section divider, statement, comparison, figures, colourways." -->
+<helmet><script src="./ds-base.js"></script></helmet>
+<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+<section data-label="Portada" data-screen-label="01" style="width:1920px;height:1080px;box-sizing:border-box;padding:108px 132px;display:flex;flex-direction:column;justify-content:space-between;background:#0B0B0B;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 6px);color:#F6F3EC;font-family:Archivo,sans-serif">
+<img src="../../assets/novalan-lockup-wordmark-light.png" alt="Novalan" style="width:390px;display:block">
+<div style="display:grid;gap:40px">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#C4B995">Presentación de colección · Otoño 2026</span>
+<h1 style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:156px;line-height:.98;letter-spacing:-.01em;margin:0;max-width:20ch">Tejido para durar generaciones</h1>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:flex-end">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:rgba(246,243,236,.55)">Puebla, México</span>
+<span style="font-family:ui-monospace,Menlo,monospace;font-size:22px;color:rgba(246,243,236,.55)">01</span>
+</div>
+</section>
+<section data-label="Sección" data-screen-label="02" style="width:1920px;height:1080px;box-sizing:border-box;padding:108px 132px;display:flex;flex-direction:column;justify-content:center;gap:44px;background:#A89B72;background-image:repeating-linear-gradient(45deg,rgba(11,11,11,.09) 0 1px,transparent 1px 5px);color:#0B0B0B;font-family:Archivo,sans-serif">
+<span style="font-family:ui-monospace,Menlo,monospace;font-size:22px;color:rgba(11,11,11,.6)">02 / 06</span>
+<div style="height:1px;background:rgba(11,11,11,.35);width:300px"></div>
+<h2 style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:132px;line-height:1;margin:0;max-width:18ch">El taller y sus telares</h2>
+<span style="font-family:'Bodoni Moda',serif;font-style:italic;font-size:45px;color:#2E2118">Seis telares de lanzadera, cuarenta y tres años</span>
+</section>
+<section data-label="Declaración" data-screen-label="03" style="width:1920px;height:1080px;box-sizing:border-box;padding:108px 132px;display:flex;flex-direction:column;justify-content:center;gap:60px;background:#F6F3EC;color:#0B0B0B;font-family:Archivo,sans-serif">
+<div style="height:1px;background:#0B0B0B"></div>
+<h2 style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:114px;line-height:1.05;margin:0;max-width:26ch">Cada rollo lleva su número de lote y la firma de quien lo revisó.</h2>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#8A8272">Trazabilidad</span>
+<img src="../../assets/novalan-lockup-wordmark.png" alt="Novalan" style="width:195px;opacity:.8;display:block">
+</div>
+</section>
+<section data-label="Comparación" data-screen-label="04" style="width:1920px;height:1080px;box-sizing:border-box;padding:108px 132px;display:grid;grid-template-rows:auto 1fr;gap:66px;background:#F6F3EC;color:#0B0B0B;font-family:Archivo,sans-serif">
+<div style="display:grid;gap:21px">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#8A8272">Modelo de negocio</span>
+<h2 style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:84px;margin:0">Menudeo y mayoreo</h2>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1px 1fr;gap:84px">
+<div style="display:grid;gap:33px;align-content:start">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#4A3728">Menudeo · novalan.mx</span>
+<div style="display:grid;gap:0">
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Ticket promedio</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">$2,860 MXN</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Piezas por temporada</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">42</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Entrega</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">3–5 días</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Margen</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">62%</span></div>
+</div>
+</div>
+<div style="background:rgba(11,11,11,.28)"></div>
+<div style="display:grid;gap:33px;align-content:start">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#4A3728">Mayoreo · portal</span>
+<div style="display:grid;gap:0">
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Pedido mínimo</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">30 m</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Tejidos en catálogo</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">18</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Plazo</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">4 semanas</span></div>
+<div style="display:flex;justify-content:space-between;padding:18px 0;border-top:1px solid rgba(11,11,11,.14)"><span style="font-size:17px;letter-spacing:.16em;text-transform:uppercase;color:#8A8272">Margen</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:26px">38%</span></div>
+</div>
+</div>
+</div>
+</section>
+<section data-label="Cifras" data-screen-label="05" style="width:1920px;height:1080px;box-sizing:border-box;padding:108px 132px;display:grid;grid-template-rows:auto 1fr auto;gap:60px;background:#F6F3EC;color:#0B0B0B;font-family:Archivo,sans-serif">
+<div style="display:grid;gap:21px">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;font-weight:500;color:#8A8272">Cierre 2025</span>
+<h2 style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:84px;margin:0">El año en números</h2>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:3px;align-content:start">
+<div style="background:#FFFFFF;border:1px solid rgba(11,11,11,.14);padding:51px 42px;display:grid;gap:18px;align-content:start;box-sizing:border-box;height:300px"><span style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:96px;line-height:1">48,200</span><span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">metros tejidos</span></div>
+<div style="background:#FFFFFF;border:1px solid rgba(11,11,11,.14);padding:51px 42px;display:grid;gap:18px;align-content:start;box-sizing:border-box;height:300px"><span style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:96px;line-height:1">18</span><span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">tejidos en catálogo</span></div>
+<div style="background:#FFFFFF;border:1px solid rgba(11,11,11,.14);padding:51px 42px;display:grid;gap:18px;align-content:start;box-sizing:border-box;height:300px"><span style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:96px;line-height:1">214</span><span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">clientes de mayoreo</span></div>
+<div style="background:#FFFFFF;border:1px solid rgba(11,11,11,.14);padding:51px 42px;display:grid;gap:18px;align-content:start;box-sizing:border-box;height:300px"><span style="font-family:'Bodoni Moda',serif;font-weight:400;font-size:96px;line-height:1">1.4%</span><span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">merma en revisión</span></div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">Fuente: control de piso, Puebla</span>
+<span style="font-family:ui-monospace,Menlo,monospace;font-size:22px;color:#8A8272">05</span>
+</div>
+</section>
+<section data-label="Coloridos" data-screen-label="06" style="width:1920px;height:1080px;box-sizing:border-box;display:flex;flex-direction:column;background:#F6F3EC;color:#0B0B0B;font-family:Archivo,sans-serif">
+<div style="flex:1;display:grid;grid-template-columns:repeat(6,1fr)">
+<div style="background:#0B0B0B"></div>
+<div style="background:#4A3728;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.07) 0 1px,transparent 1px 5px)"></div>
+<div style="background:#6B5340;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.08) 0 1px,transparent 1px 6px),repeating-linear-gradient(-45deg,rgba(255,255,255,.08) 0 1px,transparent 1px 6px)"></div>
+<div style="background:#A89B72;background-image:repeating-linear-gradient(45deg,rgba(11,11,11,.09) 0 1px,transparent 1px 5px)"></div>
+<div style="background:#C4B995"></div>
+<div style="background:#D8CFB8"></div>
+</div>
+<div style="padding:66px 132px 78px;display:grid;gap:36px">
+<div style="display:grid;grid-template-columns:repeat(6,1fr)">
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Negro</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-0B0B</span></div>
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Nogal</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-4A37</span></div>
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Barro</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-6B53</span></div>
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Khaki</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-A89B</span></div>
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Arena</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-C4B9</span></div>
+<div style="display:grid;gap:6px"><span style="font-family:'Bodoni Moda',serif;font-size:36px">Crudo</span><span style="font-family:ui-monospace,Menlo,monospace;font-size:19px;color:#8A8272">NV-D8CF</span></div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(11,11,11,.14);padding-top:30px">
+<span style="font-size:19px;letter-spacing:.24em;text-transform:uppercase;color:#8A8272">Coloridos de temporada · teñido en pieza</span>
+<img src="../../assets/novalan-lockup-wordmark.png" alt="Novalan" style="width:180px;opacity:.75;display:block">
+</div>
+</div>
+</section>
+</x-import>
+
+</x-dc>
+</body>
+</html>

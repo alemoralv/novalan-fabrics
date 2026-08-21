@@ -1,0 +1,44 @@
+:root{
+/* --- Ink (black scale) --- */
+--nv-ink-950:#050505;--nv-ink-900:#0B0B0B;--nv-ink-700:#2A2723;--nv-ink-500:#4F4A42;--nv-ink-300:#8A8272;--nv-ink-100:#C9C3B4;
+/* --- Walnut (brown scale) --- */
+--nv-walnut-900:#2E2118;--nv-walnut-700:#4A3728;--nv-walnut-500:#6B5340;--nv-walnut-300:#9C8266;--nv-walnut-100:#D9C9B8;
+/* --- Khaki (the brand's warmth) --- */
+--nv-khaki-700:#8C8156;--nv-khaki-500:#A89B72;--nv-khaki-300:#C4B995;--nv-khaki-100:#D8CFB8;
+/* --- Paper (surfaces) --- */
+--nv-paper-100:#FFFFFF;--nv-paper-200:#FBF9F4;--nv-paper-300:#F6F3EC;--nv-paper-400:#EFEBE0;--nv-paper-500:#E3DDCE;
+/* --- Semantic pigments (muted, dye-bath derived) --- */
+--nv-olive-500:#5B6E4F;--nv-olive-100:#E2E6DA;
+--nv-ochre-500:#B07A2E;--nv-ochre-100:#F1E4CD;
+--nv-brick-500:#8E3B2E;--nv-brick-100:#F0DFDA;
+
+/* ============ SEMANTIC ALIASES ============ */
+/* text */
+--text-primary:var(--nv-ink-900);--text-secondary:var(--nv-ink-700);--text-muted:var(--nv-ink-300);
+--text-accent:var(--nv-walnut-700);--text-inverse:var(--nv-paper-300);--text-on-accent:var(--nv-ink-900);
+--text-link:var(--nv-walnut-700);--text-link-hover:var(--nv-ink-900);
+/* surfaces */
+--surface-page:var(--nv-paper-300);--surface-card:var(--nv-paper-100);--surface-sunken:var(--nv-paper-400);
+--surface-raised:var(--nv-paper-200);--surface-inverse:var(--nv-ink-900);--surface-accent:var(--nv-khaki-500);
+--surface-accent-soft:var(--nv-khaki-100);--surface-brown:var(--nv-walnut-700);
+/* borders */
+--border-hairline:rgba(11,11,11,.14);--border-hairline-strong:rgba(11,11,11,.28);--border-solid:var(--nv-ink-900);
+--border-accent:var(--nv-khaki-500);--border-inverse:rgba(246,243,236,.28);
+/* interaction */
+--state-hover-surface:rgba(11,11,11,.04);--state-hover-ink:var(--nv-walnut-700);
+--state-press-surface:rgba(11,11,11,.08);--state-disabled-fg:var(--nv-ink-300);--state-disabled-bg:var(--nv-paper-400);
+--focus-ring:var(--nv-khaki-700);
+/* status */
+--status-success-fg:var(--nv-olive-500);--status-success-bg:var(--nv-olive-100);
+--status-warning-fg:var(--nv-ochre-500);--status-warning-bg:var(--nv-ochre-100);
+--status-danger-fg:var(--nv-brick-500);--status-danger-bg:var(--nv-brick-100);
+}
+/* Inverse scope — black sections, footers, hero blocks */
+[data-nv-theme="ink"]{
+--text-primary:var(--nv-paper-300);--text-secondary:rgba(246,243,236,.76);--text-muted:rgba(246,243,236,.5);
+--text-accent:var(--nv-khaki-300);--text-inverse:var(--nv-ink-900);--text-link:var(--nv-khaki-300);--text-link-hover:var(--nv-paper-100);
+--surface-page:var(--nv-ink-900);--surface-card:var(--nv-ink-700);--surface-sunken:var(--nv-ink-950);--surface-raised:var(--nv-ink-700);
+--surface-inverse:var(--nv-paper-300);
+--border-hairline:rgba(246,243,236,.2);--border-hairline-strong:rgba(246,243,236,.4);--border-solid:var(--nv-paper-300);
+--state-hover-surface:rgba(246,243,236,.06);--state-press-surface:rgba(246,243,236,.12);
+}

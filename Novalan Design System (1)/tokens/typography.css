@@ -1,0 +1,36 @@
+:root{
+--font-display:"Bodoni Moda",Didot,"Times New Roman",serif;
+--font-ui:Archivo,"Helvetica Neue",Helvetica,sans-serif;
+--font-script:"Pinyon Script","Bodoni Moda",cursive; /* tagline lockup only */
+--font-mono:ui-monospace,"SFMono-Regular",Menlo,monospace; /* lot numbers, specs */
+
+/* display scale — Bodoni Moda */
+--fs-display-1:76px;--fs-display-2:56px;--fs-display-3:40px;--fs-display-4:28px;--fs-display-5:21px; /* @kind font */
+--lh-display:1.05; /* @kind other */
+--lh-display-tight:.98; /* @kind other */
+--ls-display:-.01em; /* @kind other */
+/* body / UI — Archivo */
+--fs-body-lg:18px;--fs-body:15px;--fs-body-sm:13px;--fs-caption:12px; /* @kind font */
+--lh-body:1.7; /* @kind other */
+--lh-body-tight:1.5; /* @kind other */
+/* micro-labels — letterspaced uppercase, the system's wayfinding */
+--fs-label:10px;--fs-label-lg:11px;--ls-label:.24em;--ls-label-tight:.16em; /* @kind font */
+/* weights */
+--fw-display:400; /* @kind other */
+--fw-display-medium:500; /* @kind other */
+--fw-light:300; /* @kind other */
+--fw-regular:400; /* @kind other */
+--fw-medium:500; /* @kind other */
+--fw-semibold:600; /* @kind other */
+
+/* composed roles */
+--type-hero:var(--fw-display) var(--fs-display-1)/var(--lh-display-tight) var(--font-display); /* @kind font */
+--type-h1:var(--fw-display) var(--fs-display-2)/var(--lh-display) var(--font-display); /* @kind font */
+--type-h2:var(--fw-display) var(--fs-display-3)/var(--lh-display) var(--font-display); /* @kind font */
+--type-h3:var(--fw-display) var(--fs-display-4)/1.15 var(--font-display); /* @kind font */
+--type-h4:var(--fw-display) var(--fs-display-5)/1.2 var(--font-display); /* @kind font */
+--type-body:var(--fw-light) var(--fs-body)/var(--lh-body) var(--font-ui); /* @kind font */
+--type-body-sm:var(--fw-light) var(--fs-body-sm)/var(--lh-body-tight) var(--font-ui); /* @kind font */
+--type-label:var(--fw-medium) var(--fs-label)/1.4 var(--font-ui); /* @kind font */
+--type-button:var(--fw-medium) var(--fs-label-lg)/1 var(--font-ui); /* @kind font */
+}

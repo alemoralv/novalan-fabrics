@@ -1,0 +1,1916 @@
+/* =============================================================================
+   Novalan — site.css
+   The only authored stylesheet. Loads AFTER assets/css/novalan-tokens.css.
+   Everything below is built from design-system custom properties; the only
+   literal lengths are aspect ratios, the 1 px hairline, clamp()/min() bounds
+   and the few contract-mandated geometries (82 px header, drawer width),
+   which are declared once as local tokens in section 01.
+
+   01  Local tokens
+   02  Reset
+   03  Layout primitives   .nv-container .nv-section .nv-prose .nv-split .nv-grid-*
+   04  Type utilities      .nv-label .nv-mono .nv-h1..4 .nv-lede .nv-hairline .nv-icon
+   05  Skip link           .nv-skip
+   06  Header + nav        .nv-header .nv-nav .nv-lang .nv-burger
+   07  Mobile drawer       .nv-drawer
+   08  Footer              .nv-footer
+   09  Hero                .nv-hero
+   10  Labelled rule       .nv-rule
+   11  Buttons             .nv-btn
+   12  Cards               .nv-card
+   13  Figures             .nv-figure
+   14  Key figures         .nv-figures
+   15  Spec list           .nv-spec
+   16  Tags                .nv-tag
+   17  Hairline list       .nv-list
+   18  Pull quote          .nv-quote
+   19  Bands               .nv-band .nv-cta
+   20  Timeline            .nv-timeline
+   21  Video facade        .nv-video
+   22  Lightbox            .nv-lightbox
+   23  Reveal on scroll    .nv-reveal
+   24  Breakpoints         1180 / 900 / 560
+   25  Reduced motion
+   26  Print
+   ============================================================================= */
+
+
+/* =============================================================================
+   01  LOCAL TOKENS
+   Derived values the design system does not ship. Colour values are always
+   composed from design-system colour tokens via color-mix — never a raw hex.
+   ============================================================================= */
+
+:root {
+  /* chrome geometry (contract §4) */
+  --site-header-h: 82px;              /* 64px below 900px, see §24 */
+  --site-logo-w: 132px;
+  --site-drawer-w: 27rem;
+  --site-lockup-w: 208px;
+  --site-footer-mark-w: 150px;
+
+  /* stacking order */
+  --site-z-header: 30;
+  --site-z-drawer: 60;
+  --site-z-lightbox: 80;
+  --site-z-skip: 100;
+
+  /* proportions */
+  --site-hero-max-h: 78svh;
+  --site-band-min-h: 58svh;
+  --site-play: var(--space-9);
+
+  /* Micro-label ink. --text-muted (#8A8272) on paper (#F6F3EC) measures 3.44:1,
+     under the 4.5:1 floor, and micro-labels are the site's smallest type — so
+     the whole wayfinding layer resolves to --text-secondary instead. Inside
+     data-nv-theme="ink" that token is already rgba(246,243,236,.76), so the ink
+     bands stay correct without a second rule. --text-muted survives only where
+     it lands on ink and passes: the footer's bottom row. */
+  --site-label-fg: var(--text-secondary);
+
+  /* composed inks — alpha steps of the design-system palette */
+  --site-ink-72: color-mix(in srgb, var(--nv-ink-900) 72%, transparent);
+  --site-ink-46: color-mix(in srgb, var(--nv-ink-900) 46%, transparent);
+  --site-ink-34: color-mix(in srgb, var(--nv-ink-900) 34%, transparent);
+  --site-ink-10: color-mix(in srgb, var(--nv-ink-900) 10%, transparent);
+  --site-paper-82: color-mix(in srgb, var(--nv-paper-300) 82%, transparent);
+
+  /* overlays over photography */
+  --site-veil-hero: linear-gradient(90deg, var(--site-ink-72) 0%, var(--site-ink-46) 46%, var(--site-ink-10) 100%);
+  --site-veil-band: linear-gradient(90deg, var(--site-ink-72) 0%, var(--site-ink-34) 100%);
+  --site-veil-still: linear-gradient(0deg, var(--site-ink-46), var(--site-ink-46));
+
+  /* motion pairs used more than once */
+  --site-transition-media: transform var(--dur-slow) var(--ease-standard);
+  --site-transition-lift: border-color var(--dur-fast) var(--ease-standard),
+                          box-shadow var(--dur) var(--ease-standard);
+}
+
+html { scroll-behavior: smooth; }
+
+/* every in-page anchor clears the sticky header */
+[id] { scroll-margin-top: calc(var(--site-header-h) + var(--space-5)); }
+
+
+/* =============================================================================
+   02  RESET — a thin layer on top of tokens/base.css, never a replacement
+   ============================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+/* NB: no overflow-x on <body> — it would turn the body into a scroll container
+   and break the sticky header. Full-bleed elements stay inside 100% width. */
+body { min-height: 100%; }
+
+img, svg, video, canvas, picture { display: block; max-width: 100%; }
+img { height: auto; }
+
+button, input, select, textarea { font: inherit; color: inherit; }
+
+button {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: var(--radius-none);
+  cursor: pointer;
+  text-align: inherit;
+}
+
+address { font-style: normal; }
+
+blockquote, figure, dl, dd { margin: 0; }
+
+ul, ol { margin: 0; padding: 0; }
+
+/* our lists are always custom-marked */
+.nv-list-reset { list-style: none; margin: 0; padding: 0; }
+
+hr { border: 0; margin: 0; }
+
+/* body scroll lock, set by site.js while a modal owns the screen */
+body.nv-no-scroll { overflow: hidden; }
+
+.nv-sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+
+/* =============================================================================
+   03  LAYOUT PRIMITIVES
+   ============================================================================= */
+
+.nv-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--page-margin);
+}
+
+/* vertical rhythm between content sections */
+.nv-section { padding-block: var(--section-y); }
+.nv-section--tight { padding-block: var(--space-8); }
+.nv-section--flush-top { padding-block-start: 0; }
+.nv-section--flush-bottom { padding-block-end: 0; }
+
+/* section head: labelled rule, heading, optional lede */
+.nv-section__head {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-end: var(--space-7);
+}
+.nv-section__head .nv-rule { margin-block-end: var(--space-2); }
+
+/* prose measure */
+.nv-prose { max-width: var(--container-text); }
+.nv-prose > p:last-child { margin-block-end: 0; }
+.nv-prose--wide { max-width: 76ch; }
+
+/* editorial two-part layout: body + aside */
+.nv-split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+.nv-split--aside { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+.nv-split--even { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.nv-split--reverse > *:first-child { order: 2; }
+
+/* plain grids */
+.nv-grid-2, .nv-grid-3, .nv-grid-4 { display: grid; gap: var(--gutter); }
+.nv-grid-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.nv-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.nv-grid-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.nv-grid--gap-lg { gap: var(--space-8); }
+.nv-grid--gap-sm { gap: var(--space-4); }
+
+/* generic vertical stack */
+.nv-stack { display: grid; gap: var(--space-5); align-content: start; }
+.nv-stack--sm { gap: var(--space-3); }
+.nv-stack--lg { gap: var(--space-7); }
+
+/* inline row of controls */
+.nv-actions { display: flex; flex-wrap: wrap; gap: var(--space-3); align-items: center; }
+
+
+/* =============================================================================
+   04  TYPE UTILITIES
+   ============================================================================= */
+
+/* micro-label — 10–11 px, uppercase, no terminal punctuation */
+.nv-label {
+  margin: 0;
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+}
+.nv-label--lg { font-size: var(--fs-label-lg); }
+.nv-label--tight { letter-spacing: var(--ls-label-tight); }
+.nv-label--accent { color: var(--text-accent); }
+.nv-label--ink { color: var(--text-primary); }
+
+/* every number is mono */
+.nv-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+}
+
+/* display roles for elements that are not headings */
+.nv-h1 { font: var(--type-h1); letter-spacing: var(--ls-display); }
+.nv-h2 { font: var(--type-h2); letter-spacing: var(--ls-display); }
+.nv-h3 { font: var(--type-h3); letter-spacing: var(--ls-display); }
+.nv-h4 { font: var(--type-h4); letter-spacing: var(--ls-display); }
+.nv-h2, .nv-h1 { margin: 0; }
+
+/* headings inside a section get a comfortable measure by default */
+.nv-section h2, .nv-section .nv-h2 { max-width: 22ch; }
+
+/* standfirst / intro paragraph */
+.nv-lede {
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+
+/* body copy in a muted register */
+.nv-muted { color: var(--text-secondary); }
+
+/* a bare hairline (tokens/base.css used to give .nv-rule this behaviour) */
+.nv-hairline {
+  display: block;
+  height: 1px;
+  background: var(--border-hairline);
+  border: 0;
+  margin: 0;
+}
+.nv-hairline--strong { background: var(--border-hairline-strong); }
+.nv-hairline--accent { background: var(--border-accent); }
+
+/* inline text link with a trailing arrow */
+.nv-link-arrow {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-button);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-hairline-strong);
+  padding-block-end: var(--space-1);
+  /* the arrow link is a control, so it carries the 44px floor like every other one */
+  min-height: var(--control-h);
+  transition: var(--transition-ink);
+}
+.nv-link-arrow:hover { color: var(--text-accent); border-bottom-color: var(--border-solid); }
+
+/* icons — Lucide geometry, 1.25 stroke, currentColor */
+.nv-icon {
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+/* =============================================================================
+   05  SKIP LINK
+   ============================================================================= */
+
+.nv-skip {
+  position: fixed;
+  inset-block-start: var(--space-4);
+  inset-inline-start: var(--space-4);
+  z-index: var(--site-z-skip);
+  transform: translateY(calc(-1 * var(--space-10)));
+  padding: var(--space-3) var(--space-5);
+  background: var(--nv-ink-900);
+  color: var(--nv-paper-300);
+  font: var(--type-button);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: transform var(--dur) var(--ease-standard);
+}
+.nv-skip:focus, .nv-skip:focus-visible { transform: translateY(0); }
+
+
+/* =============================================================================
+   06  HEADER
+   ============================================================================= */
+
+.nv-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--site-z-header);
+  background: var(--surface-page);
+  border-block-end: 1px solid var(--border-hairline);
+  transition: border-color var(--dur-fast) var(--ease-standard);
+}
+.nv-header.is-scrolled { border-block-end-color: var(--border-hairline-strong); }
+
+.nv-header__inner {
+  height: var(--site-header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-7);
+}
+
+.nv-header__brand {
+  display: block;
+  flex: none;
+  text-decoration: none;
+  line-height: 0;
+}
+.nv-header__logo { width: var(--site-logo-w); height: auto; }
+
+/* primary nav */
+.nv-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+.nv-nav__link {
+  font: var(--type-label);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  padding-block: var(--space-3);
+  border-block-end: 1px solid transparent;
+  transition: var(--transition-ink);
+}
+.nv-nav__link:hover { color: var(--text-primary); }
+.nv-nav__link[aria-current="page"] {
+  color: var(--text-primary);
+  border-block-end-color: var(--border-solid);
+}
+
+.nv-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  flex: none;
+}
+
+/* ES / EN switch — the current language is plain ink, never a link */
+.nv-lang {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: 0;
+  font: var(--type-label);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+}
+/* The switch is the only language control left in the chrome below 900px, so
+   the link carries a full 44×44 hit box while sitting optically unchanged: the
+   padding lives on the inside of the pair and the box is right-aligned. */
+.nv-lang__current,
+.nv-lang__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding-inline: var(--space-2);
+}
+.nv-lang__current { color: var(--text-primary); padding-inline-start: 0; }
+.nv-lang__sep { color: var(--border-hairline-strong); }
+.nv-lang__link {
+  justify-content: flex-end;
+  min-width: var(--control-h);
+  padding-inline-end: 0;
+  color: var(--site-label-fg);
+  text-decoration: none;
+  transition: var(--transition-ink);
+}
+.nv-lang__link:hover { color: var(--text-primary); }
+
+.nv-header__cta {
+  flex: none;
+  /* overrides .nv-btn--sm: the chrome's only persistent call to action keeps the 44px floor */
+  height: var(--control-h);
+  padding-inline: var(--control-px-sm);
+}
+.nv-header__cta[aria-current="page"] {
+  background: var(--nv-ink-900);
+  border-color: var(--nv-ink-900);
+  color: var(--nv-paper-300);
+}
+
+/* hamburger — hidden until 900px */
+.nv-burger {
+  display: none;
+  width: var(--control-h);
+  height: var(--control-h);
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-hairline-strong);
+  color: var(--text-primary);
+  transition: var(--transition-ink);
+}
+.nv-burger:hover { background: var(--state-hover-surface); }
+.nv-burger__box {
+  display: grid;
+  gap: var(--space-1);
+  width: var(--space-4);
+}
+.nv-burger__bar {
+  display: block;
+  height: 1px;
+  background: currentColor;
+}
+
+
+/* =============================================================================
+   07  MOBILE DRAWER
+   ============================================================================= */
+
+.nv-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--site-z-drawer);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-standard),
+              visibility 0s linear var(--dur);
+}
+.nv-drawer.is-open {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--dur) var(--ease-standard), visibility 0s;
+}
+
+.nv-drawer__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim-ink);
+  -webkit-backdrop-filter: var(--blur-veil);
+  backdrop-filter: var(--blur-veil);
+}
+
+.nv-drawer__panel {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  width: min(100%, var(--site-drawer-w));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  padding: var(--space-5) var(--page-margin) var(--space-7);
+  background: var(--surface-page);
+  border-inline-start: 1px solid var(--border-hairline);
+  box-shadow: var(--shadow-overlay);
+  overflow-y: auto;
+  transform: translateX(var(--space-5));
+  transition: transform var(--dur) var(--ease-standard);
+}
+.nv-drawer.is-open .nv-drawer__panel { transform: translateX(0); }
+
+.nv-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-height: var(--site-header-h);
+  border-block-end: 1px solid var(--border-hairline);
+}
+.nv-drawer__logo { width: var(--site-logo-w); height: auto; }
+.nv-drawer__close {
+  width: var(--control-h);
+  height: var(--control-h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-hairline-strong);
+  font-size: var(--fs-display-5);
+  line-height: 1;
+  color: var(--text-primary);
+  transition: var(--transition-ink);
+}
+.nv-drawer__close:hover { background: var(--state-hover-surface); }
+
+.nv-drawer__nav { display: grid; }
+.nv-drawer__link {
+  display: block;
+  padding-block: var(--space-4);
+  border-block-start: 1px solid var(--border-hairline);
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: var(--fs-display-4);
+  line-height: 1.2;
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: var(--transition-ink);
+}
+.nv-drawer__link:hover { color: var(--text-accent); }
+.nv-drawer__link[aria-current="page"] { color: var(--text-accent); }
+.nv-drawer__nav > :last-child { border-block-end: 1px solid var(--border-hairline); }
+
+.nv-drawer__foot {
+  display: grid;
+  gap: var(--space-1);            /* the rows below are 44px controls */
+  justify-items: start;
+  margin-block-start: auto;
+}
+.nv-drawer__foot a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  font-size: var(--fs-body-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+}
+.nv-drawer__foot a:hover { color: var(--text-primary); }
+
+
+/* =============================================================================
+   08  FOOTER — ink ground, four columns
+   ============================================================================= */
+
+.nv-footer {
+  background: var(--nv-ink-900);
+  color: var(--text-primary);      /* inverted by data-nv-theme="ink" */
+  margin-block-start: var(--section-y);
+}
+
+/* When the page already closes on an ink band, that margin puts a strip of
+   paper between two ink blocks — an accident of section rhythm, not a
+   decision. The footer sits flush against the band instead. */
+main:has(> .nv-band--ink:last-child) + .nv-footer { margin-block-start: 0; }
+
+.nv-footer__inner {
+  display: grid;
+  grid-template-columns: 1.4fr repeat(3, 1fr);
+  gap: var(--space-7);
+  padding-block: var(--space-8) var(--space-6);
+}
+
+.nv-footer__brand { display: grid; gap: var(--space-4); align-content: start; }
+.nv-footer__mark { width: var(--site-footer-mark-w); height: auto; }
+.nv-footer__desc {
+  margin: 0;
+  max-width: 34ch;
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+
+.nv-footer__col { display: grid; gap: var(--space-3); align-content: start; }
+.nv-footer__head {
+  margin: 0;
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--nv-khaki-300);
+}
+.nv-footer__list { display: grid; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+.nv-footer__list li { font-size: var(--fs-body-sm); line-height: var(--lh-body-tight); color: var(--text-secondary); }
+/* a list of links is a list of 44px controls, so it carries no extra gap */
+.nv-footer__list:has(.nv-footer__link) { gap: 0; }
+.nv-footer__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+  font-size: var(--fs-body-sm);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition-ink);
+}
+.nv-footer__link:hover { color: var(--text-primary); }
+.nv-footer__addr {
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+
+.nv-footer__rule { height: 1px; background: var(--border-hairline); }
+
+.nv-footer__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-block: var(--space-4) var(--space-6);
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+
+/* =============================================================================
+   09  HERO — full bleed, 21:9 → 3:2 → 4:5
+   ============================================================================= */
+
+.nv-hero { position: relative; background: var(--nv-ink-900); }
+
+/* The crop is driven by a custom property set on .nv-hero, never by a compound
+   selector on .nv-hero__media — a `.nv-hero--x .nv-hero__media` rule would
+   outrank the breakpoints below and cage the hero at its desktop ratio. */
+.nv-hero__media {
+  position: relative;
+  aspect-ratio: var(--site-hero-ratio, 21 / 9);
+  max-height: var(--site-hero-max-h);
+  overflow: hidden;
+  isolation: isolate;
+}
+.nv-hero__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* two overlays: left-to-right ink veil, then the bottom protection gradient */
+.nv-hero__veil,
+.nv-hero__protect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.nv-hero__veil { background: var(--site-veil-hero); }
+.nv-hero__protect { background: var(--protect-bottom); }
+
+.nv-hero__inner {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--space-5);
+  padding-block: var(--space-7);
+}
+.nv-hero__eyebrow { color: var(--text-accent); }
+.nv-hero__title {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-display);
+  font-weight: var(--fw-display);
+  font-size: clamp(40px, 6vw, var(--fs-display-1));
+  line-height: var(--lh-display-tight);
+  letter-spacing: var(--ls-display);
+  color: var(--nv-paper-300);
+  text-wrap: balance;
+}
+.nv-hero__standfirst {
+  margin: 0;
+  max-width: 52ch;
+  font-size: var(--fs-body-lg);
+  line-height: var(--lh-body);
+  color: var(--site-paper-82);
+}
+.nv-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-block-start: var(--space-2);
+}
+
+/* paper plinth under the image — carries the script tagline lockup */
+.nv-hero__plinth {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-block: var(--space-4);
+  background: var(--surface-page);
+  border-block-end: 1px solid var(--border-hairline);
+  max-width: var(--container-max);
+}
+.nv-hero__lockup { width: var(--site-lockup-w); height: auto; }
+.nv-hero__cue {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-label);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  text-decoration: none;
+  min-height: var(--control-h);
+  transition: var(--transition-ink);
+}
+.nv-hero__cue:hover { color: var(--text-primary); }
+/* pinned right whether or not the plinth carries a left-hand fact */
+.nv-hero__cue { margin-inline-start: auto; }
+
+/* shorter hero for interior pages */
+.nv-hero--compact { --site-hero-ratio: 21 / 7; }
+
+
+/* =============================================================================
+   10  LABELLED RULE
+   Overrides the bare hairline .nv-rule shipped by tokens/base.css.
+   ============================================================================= */
+
+.nv-rule {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  height: auto;
+  background: none;
+  border: 0;
+  margin: 0 0 var(--space-6);
+}
+.nv-rule > i,
+.nv-rule__line {
+  flex: 1 1 auto;
+  height: 1px;
+  background: var(--border-hairline);
+}
+.nv-rule__label {
+  flex: none;
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+  white-space: nowrap;
+}
+.nv-rule__index {
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-lg);
+  font-variant-numeric: tabular-nums;
+  color: var(--site-label-fg);
+  white-space: nowrap;
+}
+.nv-rule--accent > i, .nv-rule--accent .nv-rule__line { background: var(--border-accent); }
+.nv-rule--strong > i, .nv-rule--strong .nv-rule__line { background: var(--border-hairline-strong); }
+
+
+/* =============================================================================
+   11  BUTTONS
+   ============================================================================= */
+
+.nv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  height: var(--control-h);
+  padding-inline: var(--control-px);
+  border: 1px solid transparent;
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--text-primary);
+  font: var(--type-button);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-ink), opacity var(--dur-fast) var(--ease-standard);
+}
+.nv-btn:active { opacity: .86; }
+
+.nv-btn--ink {
+  background: var(--nv-ink-900);
+  border-color: var(--nv-ink-900);
+  color: var(--nv-paper-300);
+}
+.nv-btn--ink:hover {
+  background: var(--nv-walnut-700);
+  border-color: var(--nv-walnut-700);
+  color: var(--nv-paper-300);
+}
+
+.nv-btn--accent {
+  background: var(--nv-khaki-500);
+  border-color: var(--nv-khaki-500);
+  color: var(--nv-ink-900);
+}
+.nv-btn--accent:hover {
+  background: var(--nv-khaki-700);
+  border-color: var(--nv-khaki-700);
+  color: var(--nv-ink-900);
+}
+
+.nv-btn--secondary {
+  border-color: var(--border-solid);
+  color: var(--text-primary);
+}
+.nv-btn--secondary:hover {
+  background: var(--state-hover-surface);
+  color: var(--text-primary);
+}
+
+.nv-btn--ghost { color: var(--text-secondary); }
+.nv-btn--ghost:hover { background: var(--state-hover-surface); color: var(--text-primary); }
+
+.nv-btn--link {
+  height: auto;
+  min-height: var(--control-h);
+  padding-inline: 0;
+  color: var(--text-link);
+  text-decoration: underline;
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+.nv-btn--link:hover { color: var(--text-link-hover); }
+
+.nv-btn--sm { height: var(--control-h-sm); padding-inline: var(--control-px-sm); font-size: var(--fs-label); }
+.nv-btn--lg { height: var(--control-h-lg); }
+.nv-btn--block { width: 100%; }
+
+
+/* =============================================================================
+   12  CARDS
+   ============================================================================= */
+
+.nv-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-none);
+}
+.nv-card--interactive { transition: var(--site-transition-lift); }
+.nv-card--interactive:hover {
+  border-color: var(--border-hairline-strong);
+  box-shadow: var(--shadow-hover);
+}
+.nv-card--interactive:hover .nv-figure__img { transform: scale(1.04); }
+.nv-card--flush { background: transparent; border: 0; }
+
+.nv-card__body {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  align-content: start;
+}
+.nv-card__title { margin: 0; font: var(--type-h4); letter-spacing: var(--ls-display); }
+.nv-card__meta {
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+}
+
+/* whole-card link target */
+.nv-card__link { color: inherit; text-decoration: none; }
+.nv-card__link::after { content: ""; position: absolute; inset: 0; }
+.nv-card__link:focus-visible { outline: 1px solid var(--focus-ring); outline-offset: 2px; }
+.nv-card:has(.nv-card__link:focus-visible) { outline: 1px solid var(--focus-ring); outline-offset: 2px; }
+
+
+/* =============================================================================
+   13  FIGURES
+   .nv-figure is the <figure>; .nv-figure__frame is the ratio box.
+   ============================================================================= */
+
+.nv-figure {
+  --fig-ratio: 16 / 10;
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+.nv-figure--4x5  { --fig-ratio: 4 / 5; }
+.nv-figure--1x1  { --fig-ratio: 1 / 1; }
+.nv-figure--3x2  { --fig-ratio: 3 / 2; }
+.nv-figure--16x10 { --fig-ratio: 16 / 10; }
+.nv-figure--19x10 { --fig-ratio: 19 / 10; }
+.nv-figure--21x9 { --fig-ratio: 21 / 9; }
+
+.nv-figure__frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--nv-ink-900);
+  aspect-ratio: var(--fig-ratio);
+}
+/* Absolute, not just height:100%. Every photograph on this site is wrapped in a
+   <picture>, which is a real box in the flow with an auto height — a percentage
+   height on the <img> resolves against that box, collapses back to the image's
+   intrinsic height, and letterboxes the ink ground under a wide source. The
+   hero and the video facade already use this pattern; the figure now matches. */
+.nv-figure__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--site-transition-media);
+}
+.nv-figure__caption {
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+}
+.nv-figure--hover:hover .nv-figure__img { transform: scale(1.04); }
+
+
+/* =============================================================================
+   14  KEY FIGURES STRIP
+   Micro-label above a mono number. Hairlines between tiles, no gaps.
+   ============================================================================= */
+
+/* min-content as the floor, not 0: the tiles stay visually equal, but a tile
+   whose value is longer than its share (100,000+ m² against 1847) is allowed
+   to claim the width it needs instead of breaking the unit onto a second line.
+   Paired with the white-space:nowrap on .nv-figures__num below. */
+.nv-figures {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(min-content, 1fr));
+  border-block-end: 1px solid var(--border-hairline);
+}
+.nv-figures__item {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+  padding: var(--space-6) var(--space-5);
+  border-block-start: 1px solid var(--border-hairline);
+  border-inline-start: 1px solid var(--border-hairline);
+}
+.nv-figures__item:nth-child(5n + 1) { border-inline-start: 0; padding-inline-start: 0; }
+.nv-figures__label {
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+  max-width: 20ch;
+}
+.nv-figures__num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(24px, 2.6vw, var(--fs-display-3));
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+  /* the number and its unit are one pair and never break apart: the unit alone
+     on a second line reads as a defect, not as a measurement */
+  white-space: nowrap;
+}
+.nv-figures--4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.nv-figures--4 .nv-figures__item:nth-child(5n + 1) { border-inline-start: 1px solid var(--border-hairline); padding-inline-start: var(--space-5); }
+.nv-figures--4 .nv-figures__item:nth-child(4n + 1) { border-inline-start: 0; padding-inline-start: 0; }
+
+
+/* =============================================================================
+   15  SPEC LIST
+   ============================================================================= */
+
+.nv-spec { display: grid; margin: 0; }
+.nv-spec__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-block: var(--space-3);
+  border-block-start: 1px solid var(--border-hairline);
+}
+.nv-spec__row:first-child { border-block-start: 0; }
+.nv-spec__label {
+  flex: none;
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+}
+.nv-spec__value {
+  margin: 0;
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-primary);
+}
+.nv-spec__value a { color: inherit; text-decoration-color: var(--border-hairline-strong); }
+.nv-spec__value--text {
+  font-family: var(--font-ui);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-body);
+}
+.nv-spec--dense .nv-spec__row { padding-block: var(--space-2); }
+.nv-spec--stacked .nv-spec__row { display: grid; gap: var(--space-1); }
+.nv-spec--stacked .nv-spec__value { text-align: left; }
+
+
+/* =============================================================================
+   16  TAGS
+   ============================================================================= */
+
+.nv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: var(--control-h-sm);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--border-hairline-strong);
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--text-secondary);
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: var(--transition-ink);
+}
+.nv-tag--accent { border-color: var(--border-accent); color: var(--text-accent); }
+.nv-tag--selected {
+  background: var(--nv-ink-900);
+  border-color: var(--nv-ink-900);
+  color: var(--nv-paper-300);
+}
+a.nv-tag, button.nv-tag { cursor: pointer; text-decoration: none; }
+a.nv-tag:hover, button.nv-tag:hover { background: var(--state-hover-surface); color: var(--text-primary); }
+
+
+/* =============================================================================
+   17  HAIRLINE LIST — numbered or plain, for values, policies, stages
+   ============================================================================= */
+
+.nv-list { display: grid; list-style: none; margin: 0; padding: 0; }
+.nv-list__item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-5);
+  padding-block: var(--space-5);
+  border-block-start: 1px solid var(--border-hairline);
+}
+.nv-list__item:last-child { border-block-end: 1px solid var(--border-hairline); }
+.nv-list__index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-accent);
+  padding-block-start: var(--space-1);
+}
+.nv-list__body { display: grid; gap: var(--space-2); }
+.nv-list__term { margin: 0; font: var(--type-h4); letter-spacing: var(--ls-display); }
+.nv-list__text { margin: 0; color: var(--text-secondary); }
+.nv-list--plain .nv-list__item { grid-template-columns: minmax(0, 1fr); }
+.nv-list--tight .nv-list__item { padding-block: var(--space-3); }
+
+
+/* =============================================================================
+   18  PULL QUOTE — Bodoni italic, one per page
+   ============================================================================= */
+
+.nv-quote {
+  display: grid;
+  gap: var(--space-4);
+  max-width: 24ch;
+  margin: 0;
+  padding-inline-start: var(--space-6);
+  border-inline-start: 1px solid var(--border-accent);
+}
+.nv-quote__text {
+  margin: 0;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: var(--fw-display);
+  font-size: clamp(28px, 3.6vw, var(--fs-display-3));
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+  color: var(--text-primary);
+}
+.nv-quote__text p { margin: 0; }
+.nv-quote__attr {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font: var(--type-label);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-accent);
+}
+.nv-quote--wide { max-width: 30ch; }
+
+
+/* =============================================================================
+   19  BANDS — full-bleed sections, ink or image
+   ============================================================================= */
+
+.nv-band {
+  position: relative;
+  padding-block: var(--section-y);
+  isolation: isolate;
+}
+.nv-band--ink { background: var(--nv-ink-900); }
+
+.nv-band--image {
+  display: grid;
+  align-content: center;
+  min-height: var(--site-band-min-h);
+  background: var(--nv-ink-900);
+  overflow: hidden;
+}
+.nv-band__media { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
+.nv-band__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.nv-band__veil { position: absolute; inset: 0; z-index: -1; background: var(--site-veil-band); pointer-events: none; }
+.nv-band__protect { position: absolute; inset: 0; z-index: -1; background: var(--protect-bottom); pointer-events: none; }
+.nv-band__inner { position: relative; }
+
+/* the ink contact band */
+.nv-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: end;
+}
+.nv-cta__body { display: grid; gap: var(--space-5); align-content: start; }
+/* the band's padding is symmetric; a trailing paragraph margin on either column
+   is what makes the space below the last element read as deeper than the space
+   above the first */
+.nv-cta__body > :last-child,
+.nv-cta__aside > :last-child { margin-block-end: 0; }
+.nv-cta__title { margin: 0; font: var(--type-h2); letter-spacing: var(--ls-display); max-width: 18ch; }
+.nv-cta__aside { display: grid; gap: var(--space-6); align-content: end; }
+.nv-cta__addr { font-size: var(--fs-body-lg); line-height: var(--lh-body); color: var(--text-secondary); }
+
+
+/* =============================================================================
+   20  TIMELINE — hairline rail, mono years
+   ============================================================================= */
+
+.nv-timeline { display: grid; }
+.nv-timeline__item {
+  display: grid;
+  grid-template-columns: minmax(0, 7rem) minmax(0, 1fr);
+  column-gap: var(--space-7);
+}
+.nv-timeline__year {
+  font-family: var(--font-mono);
+  font-size: var(--fs-display-5);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  color: var(--text-accent);
+  padding-block-start: var(--space-2);
+}
+.nv-timeline__body {
+  position: relative;
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+  padding-inline-start: var(--space-7);
+  padding-block: var(--space-2) var(--space-9);
+  border-inline-start: 1px solid var(--border-hairline);
+}
+.nv-timeline__item:last-child .nv-timeline__body { padding-block-end: 0; border-inline-start-color: transparent; }
+.nv-timeline__body::before {
+  content: "";
+  position: absolute;
+  inset-block-start: var(--space-3);
+  inset-inline-start: 0;
+  width: var(--space-2);
+  height: var(--space-2);
+  background: var(--nv-ink-900);
+  transform: translateX(-50%);
+}
+.nv-timeline__item:last-child .nv-timeline__body::after {
+  content: "";
+  position: absolute;
+  inset-block: 0 auto;
+  inset-inline-start: 0;
+  width: 1px;
+  height: var(--space-3);
+  background: var(--border-hairline);
+}
+.nv-timeline__title { margin: 0; font: var(--type-h3); letter-spacing: var(--ls-display); }
+.nv-timeline__text { max-width: var(--container-text); color: var(--text-secondary); }
+.nv-timeline__text p:last-child { margin-block-end: 0; }
+.nv-timeline__figure { margin-block-start: var(--space-3); max-width: 68ch; }
+
+
+/* =============================================================================
+   21  YOUTUBE FACADE — nothing loads from YouTube before the click
+   ============================================================================= */
+
+.nv-video {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--nv-ink-900);
+  overflow: hidden;
+}
+.nv-video__facade {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  gap: var(--space-4);
+  align-content: center;
+  color: var(--nv-paper-300);
+  border: 0;
+}
+.nv-video__img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: var(--site-transition-media);
+}
+.nv-video__veil { position: absolute; inset: 0; background: var(--site-veil-still); pointer-events: none; }
+.nv-video__play {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: var(--site-play);
+  height: var(--site-play);
+  border: 1px solid var(--nv-paper-300);
+  color: var(--nv-paper-300);
+  transition: var(--transition-ink);
+}
+.nv-video__label {
+  position: relative;
+  font: var(--type-label);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--nv-khaki-300);
+}
+.nv-video__facade:hover .nv-video__img { transform: scale(1.04); }
+.nv-video__facade:hover .nv-video__play { background: var(--nv-khaki-500); border-color: var(--nv-khaki-500); color: var(--nv-ink-900); }
+.nv-video__frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.nv-video.is-playing .nv-video__facade { display: none; }
+.nv-video__caption {
+  margin-block-start: var(--space-3);
+  font: var(--type-label);
+  font-size: var(--fs-label);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  color: var(--site-label-fg);
+}
+
+
+/* =============================================================================
+   22  LIGHTBOX — products page
+   ============================================================================= */
+
+.nv-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--site-z-lightbox);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--dur) var(--ease-standard), visibility 0s linear var(--dur);
+}
+.nv-lightbox.is-open { visibility: visible; opacity: 1; transition: opacity var(--dur) var(--ease-standard), visibility 0s; }
+
+.nv-lightbox__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--scrim-ink);
+  -webkit-backdrop-filter: var(--blur-veil);
+  backdrop-filter: var(--blur-veil);
+}
+.nv-lightbox__dialog {
+  position: relative;
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: var(--space-4);
+  padding: var(--space-5) var(--page-margin) var(--space-6);
+  color: var(--text-primary);
+}
+.nv-lightbox__top { display: flex; align-items: center; justify-content: flex-end; }
+.nv-lightbox__close {
+  width: var(--control-h);
+  height: var(--control-h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-hairline-strong);
+  color: var(--text-primary);
+  font-size: var(--fs-display-5);
+  line-height: 1;
+  transition: var(--transition-ink);
+}
+.nv-lightbox__close:hover { background: var(--state-hover-surface); }
+.nv-lightbox__figure { display: grid; place-items: center; min-height: 0; margin: 0; }
+.nv-lightbox__img { max-width: 100%; max-height: 100%; width: auto; object-fit: contain; box-shadow: var(--shadow-overlay); }
+.nv-lightbox__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--border-hairline);
+}
+.nv-lightbox__caption {
+  font: var(--type-label);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label);
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+.nv-lightbox__index {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-lg);
+  font-variant-numeric: tabular-nums;
+  color: var(--site-label-fg);
+}
+.nv-lightbox__nav { display: flex; gap: var(--space-2); }
+.nv-lightbox__step {
+  width: var(--control-h);
+  height: var(--control-h);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-hairline-strong);
+  color: var(--text-primary);
+  transition: var(--transition-ink);
+}
+.nv-lightbox__step:hover { background: var(--state-hover-surface); }
+
+
+/* =============================================================================
+   23  REVEAL ON SCROLL
+   Only armed once site.js has added .nv-js to <html>, so the page still reads
+   with JavaScript switched off.
+   ============================================================================= */
+
+.nv-js .nv-reveal {
+  opacity: 0;
+  transform: translateY(var(--space-3));
+  transition: opacity var(--dur) var(--ease-standard),
+              transform var(--dur-slow) var(--ease-out-soft);
+}
+.nv-js .nv-reveal.is-visible { opacity: 1; transform: translateY(0); }
+.nv-js .nv-reveal--delay-1 { transition-delay: calc(var(--dur-fast) / 2); }
+.nv-js .nv-reveal--delay-2 { transition-delay: var(--dur-fast); }
+.nv-js .nv-reveal--delay-3 { transition-delay: var(--dur); }
+
+
+/* =============================================================================
+   24  BREAKPOINTS — 1180 / 900 / 560
+   ============================================================================= */
+
+@media (max-width: 1180px) {
+  :root { --page-margin: var(--space-7); }
+
+  .nv-nav { gap: var(--space-5); }
+
+  .nv-figures { grid-template-columns: repeat(3, minmax(min-content, 1fr)); }
+  .nv-figures__item:nth-child(5n + 1) { border-inline-start: 1px solid var(--border-hairline); padding-inline-start: var(--space-5); }
+  .nv-figures__item:nth-child(3n + 1) { border-inline-start: 0; padding-inline-start: 0; }
+
+  .nv-grid-4 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+  .nv-footer__inner { grid-template-columns: 1.3fr repeat(3, 1fr); gap: var(--space-6); }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --page-margin: var(--page-margin-sm);
+    --section-y: var(--space-8);
+    --site-header-h: var(--space-8);
+    --site-hero-max-h: 82svh;
+    --site-band-min-h: 52svh;
+    --site-play: var(--space-8);
+    --site-hero-min-h: calc(100vw / 1.5);   /* the contract's 3:2, as a floor */
+  }
+
+  /* chrome */
+  .nv-nav, .nv-header__cta { display: none; }
+  .nv-burger { display: inline-flex; }
+  .nv-header__actions { gap: var(--space-4); }
+  .nv-drawer__panel { padding-inline: var(--page-margin); }
+
+  /* hero — below 900px the ratio becomes a floor rather than a cage. The copy
+     returns to flow inside the media box (position:relative keeps it above the
+     two overlays), so a long title, a long standfirst and two stacked buttons
+     make the box taller instead of being clipped by its overflow:hidden. */
+  .nv-hero__media {
+    aspect-ratio: auto;
+    min-height: var(--site-hero-min-h);
+    max-height: none;
+  }
+  .nv-hero__inner {
+    position: relative;
+    inset: auto;
+    gap: var(--space-4);
+    padding-block: var(--space-6);
+  }
+  .nv-hero__plinth { flex-wrap: wrap; gap: var(--space-3); padding-block: var(--space-3); }
+  .nv-hero__lockup { width: calc(var(--site-lockup-w) * .82); }
+
+  /* layout */
+  .nv-split, .nv-split--aside, .nv-split--even { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); }
+  .nv-split--reverse > *:first-child { order: 0; }
+  .nv-grid-3, .nv-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nv-grid-2 { grid-template-columns: minmax(0, 1fr); }
+
+  /* key figures — two per row */
+  .nv-figures { grid-template-columns: repeat(2, minmax(min-content, 1fr)); }
+  .nv-figures__item:nth-child(3n + 1) { border-inline-start: 1px solid var(--border-hairline); padding-inline-start: var(--space-5); }
+  .nv-figures__item:nth-child(2n + 1) { border-inline-start: 0; padding-inline-start: 0; }
+  .nv-figures__item { padding-block: var(--space-5); }
+
+  /* timeline collapses to one column, rail stays */
+  .nv-timeline__item { grid-template-columns: minmax(0, 1fr); }
+  .nv-timeline__year { padding-inline-start: var(--space-6); padding-block: 0 var(--space-2); }
+  .nv-timeline__body { padding-inline-start: var(--space-6); padding-block-end: var(--space-8); }
+  .nv-timeline__body::before { inset-block-start: 0; }
+
+  /* bands */
+  .nv-cta { grid-template-columns: minmax(0, 1fr); gap: var(--space-7); align-items: start; }
+  .nv-cta__aside { align-content: start; }
+
+  /* footer */
+  .nv-footer__inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-7); }
+  .nv-footer__brand { grid-column: 1 / -1; }
+
+  /* modals */
+  .nv-lightbox__dialog { padding-inline: var(--page-margin); }
+}
+
+@media (max-width: 560px) {
+  :root {
+    --site-hero-max-h: 88svh;
+    --site-hero-min-h: calc(100vw * 1.25);   /* the contract's 4:5, as a floor */
+  }
+
+  .nv-hero__inner { padding-block: var(--space-5); }
+  .nv-hero__actions { width: 100%; }
+  .nv-hero__actions .nv-btn { flex: 1 1 auto; }
+  .nv-hero__cue { display: none; }
+
+  .nv-grid-2, .nv-grid-3, .nv-grid-4 { grid-template-columns: minmax(0, 1fr); }
+
+  .nv-figures { grid-template-columns: minmax(0, 1fr); }
+  .nv-figures__item { border-inline-start: 0; padding-inline: 0; }
+  .nv-figures__item:nth-child(2n + 1),
+  .nv-figures__item:nth-child(3n + 1),
+  .nv-figures__item:nth-child(5n + 1) { border-inline-start: 0; padding-inline-start: 0; }
+
+  .nv-footer__inner { grid-template-columns: minmax(0, 1fr); }
+  .nv-footer__bottom { flex-direction: column; align-items: flex-start; }
+
+  .nv-rule__index { display: none; }
+
+  .nv-spec__row { display: grid; gap: var(--space-1); }
+  .nv-spec__value { text-align: left; }
+
+  .nv-list__item { grid-template-columns: minmax(0, 1fr); gap: var(--space-2); }
+
+  .nv-lightbox__bar { flex-wrap: wrap; gap: var(--space-3); }
+}
+
+
+/* =============================================================================
+   25  REDUCED MOTION — the motion tokens already collapse to 0 ms; these rules
+   neutralise the transforms and the smooth scroll as well.
+   ============================================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .nv-js .nv-reveal { opacity: 1; transform: none; }
+  .nv-drawer__panel { transform: none; }
+  .nv-card--interactive:hover .nv-figure__img,
+  .nv-figure--hover:hover .nv-figure__img,
+  .nv-video__facade:hover .nv-video__img { transform: none; }
+  .nv-skip { transition: none; }
+}
+
+
+/* =============================================================================
+   26  PRINT
+   ============================================================================= */
+
+@media print {
+  .nv-header, .nv-drawer, .nv-skip, .nv-lightbox, .nv-video__facade, .nv-hero__cue { display: none; }
+  .nv-footer { background: none; }
+  .nv-js .nv-reveal { opacity: 1; transform: none; }
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: var(--fs-label); }
+}
+
+
+/* =============================================================================
+   27  CONTACT PAGE — added by the contacto.html / en/contact.html build.
+   Three components the foundation does not ship. Same rules as the rest of the
+   file: design-system custom properties only, no raw hex, no raw colour.
+
+     .nv-map          the woven plate beside the address — cloth texture where
+                      photography is absent, per the design system. It carries
+                      the coordinates; it never pretends to be a map, so the
+                      page still makes zero network requests.
+     .nv-colophon     the quiet closing wordmark + tagline lockup
+   ============================================================================= */
+
+/* --- woven plate ----------------------------------------------------------- */
+.nv-map {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background-color: var(--surface-sunken);   /* weave sits on paper, not ink */
+  border-block-end: 1px solid var(--border-hairline);
+}
+
+.nv-map__foot {
+  position: absolute;
+  inset-block-end: var(--space-5);
+  inset-inline-start: var(--space-5);
+  display: grid;
+  gap: var(--space-2);
+}
+.nv-map__coords {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-tight);
+  color: var(--text-primary);
+}
+
+/* --- closing colophon ------------------------------------------------------ */
+.nv-colophon {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-5);
+  padding-block: var(--space-8);
+  text-align: center;
+}
+.nv-colophon__mark,
+.nv-colophon__tagline { width: var(--site-lockup-w); height: auto; }
+.nv-colophon__rule { width: var(--space-8); }
+
+@media (max-width: 900px) {
+  .nv-map__foot { inset-block-end: var(--space-4); inset-inline-start: var(--space-4); }
+}
+
+@media (max-width: 560px) {
+  .nv-colophon__mark,
+  .nv-colophon__tagline { width: calc(var(--site-lockup-w) * .82); }
+}
+
+
+/* =============================================================================
+   28  PROCESSES PAGE — added by the procesos.html / en/processes.html build.
+   One class. Same rules as the rest of the file: design-system custom
+   properties only, no raw hex, no raw colour, no raw length.
+
+     .nv-index-link   the stage-index anchors at the top of the Processes page.
+                      They sit inside .nv-list__term (a <p>), so the <a> is
+                      inline and its hit area would be the ~25 px text box.
+                      This lifts it to the standard 44 px control height
+                      without touching its type, colour or underline.
+   ============================================================================= */
+
+.nv-index-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-h);
+}
+
+
+/* =============================================================================
+   29  INTERNATIONALISATION — seven locales, three scripts
+   Added by the i18n scaffolding (I18N.md §2 and §3). Nothing above this line
+   was changed: the whole layer works by redefining custom properties the
+   components already read, plus one new component (.nv-lang__toggle/__panel).
+
+   Same rules as the rest of the file: design-system custom properties only,
+   no raw hex, no raw colour, and the only literal lengths are the clamp()
+   bounds the specification prints and the 1 px hairline.
+
+     29.1  CJK font stacks          :root
+     29.2  Script switch            :lang()
+     29.3  Per-script corrections   leading · tracking · labels · quote · measure
+     29.4  Language switcher        .nv-lang__toggle .nv-lang__panel .nv-lang__item
+     29.5  Drawer variant           .nv-lang--block
+     29.6  No-JavaScript fallback
+     29.7  Breakpoint
+   ============================================================================= */
+
+
+/* -----------------------------------------------------------------------------
+   29.1  CJK FONT STACKS  (I18N.md §3, verbatim)
+   Bodoni Moda, Archivo and Pinyon Script carry no CJK glyphs. Rather than ship
+   megabytes of Noto, the CJK locales fall through to the best system faces —
+   with the Latin faces kept FIRST in every stack, so the wordmark, the company
+   name, the numerals and the g/m² units still set in Bodoni and Archivo inside
+   a Japanese, Chinese or Korean sentence.
+   -------------------------------------------------------------------------- */
+
+:root {
+  --font-display-ja: "Bodoni Moda", "Yu Mincho", "YuMincho", "Hiragino Mincho ProN", "Noto Serif JP", "MS Mincho", serif;
+  --font-ui-ja: "Archivo", "Yu Gothic", "YuGothic", "Hiragino Sans", "Noto Sans JP", "Meiryo", sans-serif;
+  --font-display-zh: "Bodoni Moda", "Songti SC", "SimSun", "Noto Serif SC", "Source Han Serif SC", serif;
+  --font-ui-zh: "Archivo", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", "Source Han Sans SC", sans-serif;
+  --font-display-ko: "Bodoni Moda", "Nanum Myeongjo", "Batang", "Noto Serif KR", "Source Han Serif K", serif;
+  --font-ui-ko: "Archivo", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+}
+
+
+/* -----------------------------------------------------------------------------
+   29.2  SCRIPT SWITCH
+   Every component reads var(--font-display) / var(--font-ui), so redefining
+   those two properties under :lang() re-skins the whole page with no other
+   change. It also fires on a single element: the 日本語 / 中文 / 한국어 items
+   inside the switcher carry their own lang attribute, so they pick up the right
+   face while the surrounding page is still Spanish.
+   --font-mono is deliberately NOT redefined — the digits never go to a CJK face.
+   -------------------------------------------------------------------------- */
+
+:lang(ja) { --font-display: var(--font-display-ja); --font-ui: var(--font-ui-ja); }
+:lang(zh-Hans), :lang(zh) { --font-display: var(--font-display-zh); --font-ui: var(--font-ui-zh); }
+:lang(ko) { --font-display: var(--font-display-ko); --font-ui: var(--font-ui-ko); }
+
+
+/* -----------------------------------------------------------------------------
+   29.3  PER-SCRIPT TYPOGRAPHIC CORRECTIONS  (I18N.md §3 table)
+   Latin (es · en · it · fr) keeps the design-system values untouched; only the
+   CJK side is written here, again as token redefinitions, so every component
+   inherits the correction.
+
+     body line-height        1.7    ->  1.9     CJK needs more leading
+     display line-height     1.05   ->  1.35    Bodoni's leading crushes kanji
+     display letter-spacing  -.01em ->  .02em   CJK wants air, not tightening
+     micro-label             .24em uppercase -> .12em, no casing
+     numerals                mono, unchanged
+
+   --lh-display-tight (.98) is the hero's Latin-only tightening; it resolves to
+   the same 1.35 under CJK, because the crush it causes is worse there.
+   --ls-label-tight (.16em) and --ls-label (.24em) both resolve to the single
+   CJK value the table gives, .12em: the Latin distinction between the two
+   exists to relieve tracking that CJK does not carry in the first place.
+   -------------------------------------------------------------------------- */
+
+:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko) {
+  --lh-body: 1.9;
+  --lh-display: 1.35;
+  --lh-display-tight: 1.35;
+  --ls-display: .02em;
+  --ls-label: .12em;
+  --ls-label-tight: .12em;
+
+  /* wrapping: break on the line-break rules of the script, never inside a
+     Latin word, and only break mid-run when there is no other way to fit */
+  line-break: strict;
+  word-break: normal;
+  overflow-wrap: anywhere;
+}
+
+/* Korean additionally keeps 어절 whole */
+:lang(ko) { word-break: keep-all; }
+
+/* Micro-labels: there is no uppercase in CJK, and .24em shreds a kanji run.
+   The stylesheet's full uppercase inventory, in one place. */
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) :is(
+  .nv-label,
+  .nv-link-arrow,
+  .nv-skip,
+  .nv-nav__link,
+  .nv-lang,
+  .nv-lang__toggle,
+  .nv-footer__head,
+  .nv-footer__bottom,
+  .nv-hero__cue,
+  .nv-rule__label,
+  .nv-btn,
+  .nv-card__meta,
+  .nv-figure__caption,
+  .nv-figures__label,
+  .nv-spec__label,
+  .nv-tag,
+  .nv-quote__attr,
+  .nv-video__label,
+  .nv-video__caption,
+  .nv-lightbox__caption
+) { text-transform: none; }
+
+/* Pull quote: CJK has no true italic, so the browser would synthesise an ugly
+   oblique. The hanging khaki hairline on .nv-quote stays as the only marker. */
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-quote__text { font-style: normal; }
+
+/* Headline measure: ch is calibrated to the width of 0 and is meaningless for
+   full-width glyphs — 18ch is barely nine kanji. The specification's
+   18ch -> 15em sets the conversion; the other display measures follow it. */
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-hero__title {
+  /* the hero clamp also drops one step for CJK */
+  font-size: clamp(32px, 5vw, 60px);
+  max-width: 15em;
+}
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-cta__title { max-width: 15em; }
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-section h2,
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-section .nv-h2 { max-width: 18em; }
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-quote { max-width: 20em; }
+:is(:lang(ja), :lang(zh-Hans), :lang(zh), :lang(ko)) .nv-quote--wide { max-width: 25em; }
+/* Body measures (--container-text 64ch, the 52ch standfirst, the 34ch footer
+   descriptor) are left alone on purpose: 64ch lands at roughly 32 full-width
+   characters per line, which is the conventional CJK measure. */
+
+
+/* -----------------------------------------------------------------------------
+   29.4  LANGUAGE SWITCHER — the seven-item disclosure menu
+   Square panel, --surface-card ground, 1 px hairline, --shadow-overlay, no
+   radius. Items are --fs-body-sm Archivo (the CJK endonyms fall through to the
+   CJK stack through their own lang attribute), 44 px tall, 4 % ink wash on
+   hover — --state-hover-surface is exactly that wash.
+
+   The two-way ES/EN rules in section 06 are left in place and untouched: this
+   component is addressed through its own child classes, so a page that has not
+   been migrated yet keeps working.
+   -------------------------------------------------------------------------- */
+
+:root {
+  /* the panel has to clear the widest endonym plus its gutters; declared here
+     for the same reason section 01 declares the header height */
+  --site-lang-panel-w: 12rem;
+}
+
+/* the anchor for the absolutely positioned panel — harmless on the old markup */
+.nv-lang { position: relative; }
+
+/* --- toggle: a ghost control with a rotating chevron ----------------------- */
+.nv-lang__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  height: var(--control-h);
+  padding-inline: var(--space-3);
+  border: 1px solid transparent;
+  border-radius: var(--radius-none);
+  background: transparent;
+  color: var(--text-secondary);
+  font: var(--type-button);
+  font-size: var(--fs-label-lg);
+  letter-spacing: var(--ls-label-tight);
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: var(--transition-ink), opacity var(--dur-fast) var(--ease-standard);
+}
+.nv-lang__toggle:hover { background: var(--state-hover-surface); color: var(--text-primary); }
+.nv-lang__toggle:active { opacity: .86; }
+.nv-lang__toggle[aria-expanded="true"] { color: var(--text-primary); }
+.nv-lang__toggle:focus-visible { outline: 1px solid var(--focus-ring); outline-offset: 2px; }
+
+/* the endonym inside the toggle — neutralises the section 06 .nv-lang__current */
+.nv-lang__toggle .nv-lang__current {
+  min-height: 0;
+  padding-inline: 0;
+  color: inherit;
+}
+
+.nv-lang__toggle .nv-icon { transition: transform var(--dur-fast) var(--ease-standard); }
+.nv-lang__toggle[aria-expanded="true"] .nv-icon { transform: rotate(180deg); }
+
+/* --- panel ---------------------------------------------------------------- */
+.nv-lang__panel {
+  position: absolute;
+  inset-block-start: calc(100% + var(--space-2));
+  inset-inline-end: 0;
+  z-index: 1;
+  display: grid;
+  min-width: var(--site-lang-panel-w);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--surface-card);
+  border: 1px solid var(--border-hairline);
+  border-radius: var(--radius-none);
+  box-shadow: var(--shadow-overlay);
+}
+/* the attribute is the closed state; site.js adds and removes it */
+.nv-lang__panel[hidden] { display: none; }
+.nv-lang__panel li { list-style: none; }
+
+/* --- items ---------------------------------------------------------------- */
+.nv-lang__item {
+  display: flex;
+  align-items: center;
+  min-height: var(--control-h);
+  padding-inline: var(--space-4);
+  font-family: var(--font-ui);
+  font-weight: var(--fw-light);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-body-tight);
+  letter-spacing: normal;
+  text-transform: none;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: var(--transition-ink);
+}
+a.nv-lang__item:hover { background: var(--state-hover-surface); color: var(--text-primary); }
+.nv-lang__item:focus-visible { outline: 1px solid var(--focus-ring); outline-offset: -2px; }
+
+/* current locale — a plain span, marked by ink and a solid hairline rail */
+.nv-lang__item.is-current {
+  color: var(--text-primary);
+  border-inline-start: 1px solid var(--border-solid);
+  padding-inline-start: calc(var(--space-4) - 1px);
+  cursor: default;
+}
+
+
+/* -----------------------------------------------------------------------------
+   29.5  DRAWER VARIANT — a labelled block, not a dropdown
+   Below 900 px the seven links are rendered at the bottom of the nav drawer
+   under a .nv-label, with the toggle removed. The panel carries no hidden
+   attribute there; the [hidden] reset below is only a safety net.
+   The two-selector specificity is deliberate: .nv-drawer__foot a would
+   otherwise outrank .nv-lang__item.
+   -------------------------------------------------------------------------- */
+
+.nv-lang--block {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+  justify-self: stretch;
+}
+.nv-lang--block .nv-lang__toggle { display: none; }
+.nv-lang--block .nv-lang__panel,
+.nv-lang--block .nv-lang__panel[hidden] {
+  position: static;
+  z-index: auto;
+  display: grid;
+  min-width: 0;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  border-block-start: 1px solid var(--border-hairline);
+  box-shadow: none;
+}
+.nv-lang--block .nv-lang__item {
+  display: flex;
+  width: 100%;
+  min-height: var(--control-h);
+  font-size: var(--fs-body-sm);
+  color: var(--text-secondary);
+}
+.nv-lang--block a.nv-lang__item:hover { background: var(--state-hover-surface); color: var(--text-primary); }
+.nv-lang--block .nv-lang__item.is-current { color: var(--text-primary); }
+
+
+/* -----------------------------------------------------------------------------
+   29.6  NO-JAVASCRIPT FALLBACK
+   The panel ships closed (hidden) and only script can open it, so without
+   script the seven links would be unreachable. site.js puts .nv-js on <html>;
+   in its absence the panel stops being a dropdown and becomes a plain wrapping
+   row of links, and the inert toggle is removed. The drawer block is excluded —
+   it is already static, and the drawer itself needs script to open.
+   -------------------------------------------------------------------------- */
+
+html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__toggle { display: none; }
+html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__panel,
+html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__panel[hidden] {
+  position: static;
+  z-index: auto;
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__item { padding-inline: var(--space-2); }
+html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__item.is-current { padding-inline-start: calc(var(--space-2) - 1px); }
+
+
+/* -----------------------------------------------------------------------------
+   29.7  BREAKPOINT
+   Below 900 px the chrome's disclosure gives way to the drawer block, exactly
+   as .nv-nav and .nv-header__cta do in section 24. Scoped through :has() so a
+   page still carrying the old two-way ES/EN paragraph is untouched, and through
+   .nv-js so the no-script fallback above stays reachable on a phone.
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+  .nv-js .nv-header .nv-lang:has(.nv-lang__toggle) { display: none; }
+}

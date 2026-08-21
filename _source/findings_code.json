@@ -1,0 +1,58 @@
+[
+ {
+  "file": "assets/css/site.css",
+  "severity": "blocker",
+  "category": "responsive-hero",
+  "problem": "`.nv-hero--compact .nv-hero__media` (specificity 0,0,2,0) is declared at line 676, above the breakpoints, so it beats the `.nv-hero__media` rules (specificity 0,0,1,0) inside `@media (max-width:900px)` (line 1336, `3 / 2`) and `@media (max-width:560px)` (line 1374, `4 / 5`). nosotros.html, procesos.html, en/about.html and en/processes.html therefore keep a 21:7 letterbox hero on phones: at 375 px wide the media box is 125 px tall, while `.nv-hero__inner` is `position:absolute; inset:0` inside a box with `overflow:hidden` — the eyebrow, the `clamp(40px,6vw,76px)` h1 and the standfirst are clipped away. The author already solved exactly this problem for the contact hero in §27 (lines 1516 and 1521 restate 3:2 and 4:5 for `.nv-hero--16x9`) but never did it for `--compact`.",
+  "evidence": "line 676: `.nv-hero--compact .nv-hero__media { aspect-ratio: 21 / 7; }` — with no counterpart inside the 900 px / 560 px blocks.",
+  "fix": "Mirror the §27 pattern: add `.nv-hero--compact .nv-hero__media { aspect-ratio: 3 / 2; }` inside `@media (max-width:900px)` and `.nv-hero--compact .nv-hero__media { aspect-ratio: 4 / 5; }` inside `@media (max-width:560px)`. Better still, drive the ratio from a custom property (`.nv-hero__media { aspect-ratio: var(--hero-ratio, 21/9) }`, `.nv-hero--compact { --hero-ratio: 21/7 }`) so the breakpoints only ever reset the property and the specificity trap cannot recur."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "major",
+  "category": "contrast",
+  "problem": "Every micro-label set on paper uses `--text-muted` (= `--nv-ink-300` #8A8272) on `--surface-page` #F6F3EC. Measured contrast is 3.44:1, below the 4.5:1 AA floor for normal-size text — and these are 10–11 px letterspaced uppercase, the hardest text on the page to read. This is not one component: it is the section rule labels, figure captions, card meta, spec labels, key-figure labels, the lightbox index and the hero plinth label, i.e. the site's entire wayfinding layer, on all ten pages. Contract §6 sets contrast as part of the accessibility floor.",
+  "evidence": "line 206 `.nv-label { … color: var(--text-muted); }`, line 704 `.nv-rule__label { … color: var(--text-muted); }`, line 712 `.nv-rule__index`, line 827 `.nv-card__meta`, line 872 `.nv-figure__caption`, line 901 `.nv-figures__label`, line 937 `.nv-spec__label`, line 1267 `.nv-lightbox__index`, line 1198 `.nv-video__caption`.",
+  "fix": "Switch the paper-side micro-label colour to `--text-secondary` (`--nv-ink-700` #2A2723 → 13.4:1). The ink-theme override already remaps `--text-secondary` to `rgba(246,243,236,.76)` (9.8:1 on ink), so the ink bands and the footer stay correct with no extra rules. Keep `--text-muted` only for the footer bottom row, where it resolves to `rgba(246,243,236,.5)` on ink and passes at 4.65:1."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "blocker",
+  "category": "responsive",
+  "problem": "`.nv-hero--compact .nv-hero__media` (specificity 0,2,0) is declared at line 676 and is never restated inside the responsive blocks, so it beats the lower-specificity `.nv-hero__media` rules in the media queries at lines 1336 (`3 / 2`) and 1374 (`4 / 5`) regardless of source order. The compact hero therefore keeps a 21:7 box at every viewport. At a 360 px viewport the media box is 360 × 7/21 = 120 px tall, while `.nv-hero__inner` (absolutely positioned, `inset: 0`, 48 px padding-block top and bottom plus eyebrow + h1 at 40 px + standfirst) needs roughly 330–390 px. `.nv-hero__media` has `overflow: hidden`, so the h1 and the standfirst are cut off top and bottom on every phone. Affects nosotros.html, procesos.html, en/about.html, en/processes.html — on procesos/en-processes the two hero buttons vanish entirely. The author already handled exactly this trap for the contact hero (`.nv-hero--16x9` is restated at lines 1516 and 1521 with the comment \"the responsive steps below restate 3:2 and 4:5 for the same reason\") and simply missed the compact variant.",
+  "evidence": "line 676: `.nv-hero--compact .nv-hero__media { aspect-ratio: 21 / 7; }`  — no counterpart inside `@media (max-width: 900px)` or `@media (max-width: 560px)`, unlike lines 1516/1521 for `.nv-hero--16x9`.",
+  "fix": "Add the two restatements next to the existing 16x9 ones: inside `@media (max-width: 900px)` add `.nv-hero--compact .nv-hero__media { aspect-ratio: 3 / 2; }` and inside `@media (max-width: 560px)` add `.nv-hero--compact .nv-hero__media { aspect-ratio: 4 / 5; }`."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "major",
+  "category": "responsive",
+  "problem": "The hero content box is fixed by `aspect-ratio` and the content is absolutely positioned inside it with no escape valve, so the home-page hero copy is clipped on phones. At a 360 px viewport, `.nv-hero__media` is 4/5 → 450 px tall (line 1374; `max-height` at line 1372 can only shrink it, never grow it). The content inside `.nv-hero__inner` at that width is: 96 px padding-block (2 × `--space-7`, line 620, not reduced by the breakpoints), 14 px eyebrow, ~3 lines of h1 at 40 px / 0.98 ≈ 118 px, ~6 lines of standfirst at 18 px / 1.7 ≈ 184 px, 3 × 16 px gaps = 48 px, and the two hero buttons which at 312 px of available inline space cannot sit on one row (`Productos` ≈ 136 px + `Video corporativo` ≈ 203 px + 12 px gap > 312 px) so they take 2 × 44 px + 12 px + 8 px = 108 px. Total ≈ 568 px against 450 px available; even under maximally generous line-count assumptions the floor is ~441 px, i.e. zero margin. Because `.nv-hero__inner` is `justify-content: center` inside a box with `overflow: hidden`, the eyebrow is clipped at the top and the call-to-action buttons at the bottom. Affects index.html and en/index.html (longest title + longest standfirst + two buttons).",
+  "evidence": "line 589 `aspect-ratio: 21 / 9;` + line 1374 `.nv-hero__media { aspect-ratio: 4 / 5; }` + line 612–620 `.nv-hero__inner { position: absolute; inset: 0; … justify-content: center; padding-block: var(--space-7); }` with `.nv-hero__media { overflow: hidden }` (line 591).",
+  "fix": "Stop pinning the content: in `@media (max-width: 900px)` change `.nv-hero__media` from a hard ratio to `aspect-ratio: auto; min-height: 62svh` (or keep the ratio but add `min-height: max-content`) and make `.nv-hero__inner` static (`position: static`) with the image absolutely positioned behind it, so the box grows to fit the copy. Also reduce `.nv-hero__inner { padding-block: var(--space-5); }` below 560 px."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "major",
+  "category": "accessibility",
+  "problem": "Every micro-label, caption, spec label, rule label and card meta line on the paper ground is painted in `--text-muted` (`--nv-ink-300` = #8A8272) at 10–11 px. Against `--surface-page` (#F6F3EC) that measures 3.44:1 (relative luminances 0.2258 and 0.8975). WCAG 2.1 SC 1.4.3 requires 4.5:1 for text this size — 10–11 px is nowhere near the \"large text\" threshold of 24 px. This is site-wide: it hits `.nv-label` (line 205), `.nv-lang__link` (376), `.nv-rule__label` (704), `.nv-rule__index` (712), `.nv-card__meta` (827), `.nv-figure__caption` (872), `.nv-figures__label` (901), `.nv-spec__label` (937) and `.nv-video__caption` (1198) on all ten pages. The same token inside `data-nv-theme=\"ink\"` resolves to rgba(246,243,236,.5) on #0B0B0B ≈ 4.9:1 and does pass, so only the paper side is failing.",
+  "evidence": "`.nv-label { … color: var(--text-muted); }` (site.css line 199–206) rendering #8A8272 on #F6F3EC = 3.44:1 at `--fs-label` 10px.",
+  "fix": "Do not edit the read-only tokens. In site.css swap `var(--text-muted)` for `var(--text-secondary)` (#2A2723 → 13.4:1 on paper) on the paper-side small-text selectors listed above, or define one local token `--site-label-fg: var(--text-secondary)` in §01 and use it for all micro-labels, leaving the ink-scope rules alone."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "major",
+  "category": "accessibility",
+  "problem": "Several interactive targets fall well below the contract's 44 px floor (§6), and two of them are touch-only controls. `.nv-lang__link` is a bare inline 11 px text link with no padding and no min-height; it stays visible below 900 px (the 900 px block hides `.nv-nav` and `.nv-header__cta` but not `.nv-lang`), so on a phone the only language switch in the header is roughly 22 × 22 px. `.nv-drawer__foot a` is 13 px text at line-height 1.7 ≈ 22 px tall with 12 px gaps — those are the phone numbers, the e-mail and the second language switch inside the mobile drawer. `.nv-footer__link` is 13 px in `li` at line-height 1.5 ≈ 20 px with 8 px gaps. `.nv-link-arrow` (index.html/en/index.html, \"Nuestros Procesos\") is ~19 px tall. The author fixed exactly this problem for the processes stage index with `.nv-index-link { min-height: var(--control-h) }` (line 1541) but did not apply the same treatment elsewhere.",
+  "evidence": "lines 372–378 `.nv-lang__link { color: var(--text-muted); text-decoration: none; transition: var(--transition-ink); }` — no `min-height`, no padding; lines 497–503 `.nv-drawer__foot a { font-size: var(--fs-body-sm); … }`; lines 550–556 `.nv-footer__link { font-size: var(--fs-body-sm); … }`; lines 249–261 `.nv-link-arrow { … padding-block-end: var(--space-1); }`.",
+  "fix": "Give each of them the same treatment as `.nv-index-link`: `display: inline-flex; align-items: center; min-height: var(--control-h);` on `.nv-lang__link`, `.nv-drawer__foot a`, `.nv-footer__link` and `.nv-link-arrow` (for `.nv-lang__link`, add `padding-inline: var(--space-2)` so the hit box is ≥44 px wide as well)."
+ },
+ {
+  "file": "assets/css/site.css",
+  "severity": "minor",
+  "category": "accessibility",
+  "problem": "The header \"Contacto\"/\"Contact\" button uses `.nv-btn--sm`, whose height is `--control-h-sm` = 32 px, below the contract's 44 px control floor. It is hidden below 900 px so this is pointer-only, but it is the one persistent call-to-action in the chrome on all ten pages.",
+  "evidence": "`.nv-btn--sm { height: var(--control-h-sm); padding-inline: var(--control-px-sm); font-size: var(--fs-label); }` (site.css line 786) applied by `<a class=\"nv-btn nv-btn--secondary nv-btn--sm nv-header__cta\" href=\"contacto.html\">Contacto</a>` (index.html line 58 and the equivalent line 40 on the other nine pages).",
+  "fix": "Drop `nv-btn--sm` from the header CTA on all ten pages so it uses the standard `--control-h` (44 px), or add `.nv-header__cta { min-height: var(--control-h); }` to site.css."
+ }
+]

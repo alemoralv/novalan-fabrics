@@ -1,0 +1,15 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Paper" subtitle="Surfaces — page, card, sunken, raised" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:20px 22px;background:var(--surface-page)}
+.sw{display:grid;grid-template-columns:repeat(var(--n,6),1fr);gap:2px}
+.sw div{height:74px;display:flex;flex-direction:column;justify-content:flex-end;padding:8px;font:var(--type-label);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
+.hex{font-family:var(--font-mono);font-size:9px;opacity:.75;display:block;letter-spacing:0}
+.lbl{font:var(--type-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-muted);margin-bottom:10px}
+</style></head><body>
+<div class="sw" style="--n:5">
+<div style="background:var(--nv-paper-100);color:#0B0B0B;box-shadow:inset 0 0 0 1px var(--border-hairline)">100 card<span class="hex">#FFFFFF</span></div>
+<div style="background:var(--nv-paper-200);color:#0B0B0B">200 raised<span class="hex">#FBF9F4</span></div>
+<div style="background:var(--nv-paper-300);color:#0B0B0B;box-shadow:inset 0 0 0 1px var(--border-hairline)">300 page<span class="hex">#F6F3EC</span></div>
+<div style="background:var(--nv-paper-400);color:#0B0B0B">400 sunken<span class="hex">#EFEBE0</span></div>
+<div style="background:var(--nv-paper-500);color:#0B0B0B">500 edge<span class="hex">#E3DDCE</span></div>
+</div></body></html>

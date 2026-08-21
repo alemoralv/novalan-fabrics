@@ -1,0 +1,290 @@
+[
+ {
+  "file": "productos.html",
+  "severity": "blocker",
+  "category": "invented-content",
+  "problem": "The products CTA band is headed with an offer that appears nowhere in CONTENT.md. Neither the source ES page (_source/pages/productos.html) nor CONTENT.md §3 or §5 mentions quotations, quoting, or any invitation to request pricing. The supporting sentence is also authored from scratch. CONTENT.md §5 gives only the company name, the descriptor, the address, the two phones, the e-mail and the 'Ver mapa' button; the build contract §7 forbids adding a service that is not in the file.",
+  "evidence": "line 548: <h2 class=\"nv-cta__title\" id=\"contacto-title\">Solicita una cotización</h2>\nline 549: <p class=\"nv-lede nv-prose\">Escríbenos por correo electrónico o llámanos por teléfono.</p>",
+  "fix": "Replace line 548 with the traceable heading used in every other ES CTA band, <h2 class=\"nv-cta__title\" id=\"contacto-title\">Novalan, S.A. de C.V.</h2>, and replace line 549 with the CONTENT.md §5 ES descriptor, <p class=\"nv-lede nv-prose\">Fabricación y venta de tejidos de moda en lana y mezclas, hilos, tapicería y tejidos técnicos.</p>. Keep the mailto:/tel: affordances exactly as they are. Apply the mirror fix in en/products.html."
+ },
+ {
+  "file": "en/products.html",
+  "severity": "blocker",
+  "category": "invented-content",
+  "problem": "Mirror of the ES defect: the products CTA band asserts a quotation service that is not in CONTENT.md. CONTENT.md §3 carries no service copy at all for the products page, and §5 offers only the company name, descriptor, address, phones, e-mail and the 'See Map' button.",
+  "evidence": "line 548: <h2 class=\"nv-cta__title\" id=\"contact-title\">Request a quotation</h2>\nline 549: <p class=\"nv-lede nv-prose\">Write to us by e-mail or call us by phone.</p>",
+  "fix": "Replace line 548 with <h2 class=\"nv-cta__title\" id=\"contact-title\">Novalan, S.A. de C.V.</h2> and line 549 with the CONTENT.md §5 EN descriptor, <p class=\"nv-lede nv-prose\">Manufacture and sale of wool fashion fabrics and blends, upholstery, technical textiles and yarns.</p>. Leave the mailto:/tel: links untouched."
+ },
+ {
+  "file": "en/index.html",
+  "severity": "major",
+  "category": "english-grammar",
+  "problem": "The EN home page reproduces the original site's grammatical errors verbatim, even though the build contract §7 explicitly permits copy-editing grammar and the same page's own <meta name=\"description\"> already applies the fix ('is world widely recognized'). The body text is therefore internally inconsistent with the head, and en/processes.html has already dropped the spurious comma in the 'vertically integrated' sentence while en/index.html keeps it. No meaning changes are needed for any of these.",
+  "evidence": "line 117: \"…San Ildefonso Fábrica de Tejidos de Lana, S.A. de C.V., are world widely recognized by the quality of their products…\"  (cf. line 7 which already reads \"is world widely recognized\")\nline 181: \"San Ildefonso is one of the 10 most antique companies in Mexico\"\nline 233: \"…the work of highly committed personnel with producing with the highest quality and under international standards…\"\nline 234: \"Novalan produces as well, technical fabrics, billiard cloth…\"\nline 273: \"San Ildefonso and Novalan, are vertically integrated companies, which allows us to keep complete control of the whole manufacturing process, being highly flexible and adapt quickly to the market's needs.\"\nline 274: \"Our production facilities surpasses one million square feet.\"",
+  "fix": "line 117 → \"Our group, integrated by Novalan, S.A. de C.V. and San Ildefonso Fábrica de Tejidos de Lana, S.A. de C.V., is world widely recognized by the quality of their products, service and prestige.\"  line 181 → \"one of the 10 oldest companies in Mexico\".  line 233 → \"…the work of highly committed personnel producing with the highest quality and under international standards…\".  line 234 → \"Novalan also produces technical fabrics, billiard cloth…\".  line 273 → delete the comma after \"Novalan\" (matching en/processes.html line 99) and change \"being highly flexible and adapt quickly\" to \"being highly flexible and adapting quickly\".  line 274 → \"Our production facilities surpass one million square feet.\"  No fact, number or product name changes."
+ },
+ {
+  "file": "en/contact.html",
+  "severity": "major",
+  "category": "english-grammar",
+  "problem": "The same two source grammar errors are repeated on the contact page, so the EN site will read differently from itself once en/index.html is corrected.",
+  "evidence": "line 196: \"Our group integrated by Novalan, S.A. de C.V. and San Ildefonso Fábrica de Tejidos de Lana, S.A. de C.V., are world widely recognized by the quality of their products, service and prestige.\"\nline 236: \"One of the 10 most antique companies in Mexico and the oldest textile factory in America.\"",
+  "fix": "line 196 → \"Our group, integrated by Novalan, S.A. de C.V. and San Ildefonso Fábrica de Tejidos de Lana, S.A. de C.V., is world widely recognized by the quality of their products, service and prestige.\"  line 236 → \"One of the 10 oldest companies in Mexico and the oldest textile factory in America.\"  Keep both corrections identical to the wording used on en/index.html."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "es-en-asymmetry",
+  "problem": "The ES 'Acciones concretas' list has 4 items; the EN list at en/about.html has 5. The ES page has no counterpart for the EN bullet about generating employment, and the ES water-treatment bullet omits the EN clause about anticipating ecological law. This mirrors CONTENT.md exactly (its ES list has 4 bullets, its EN list 5), so the builder followed the source faithfully — but it is not one of the two asymmetries CONTENT.md flags as deliberate (the facilities figure and the address label), so a reader switching languages loses a claim.",
+  "evidence": "nosotros.html lines 445–470 list four <li> items (Manteniendo instalaciones… / San Ildefonso fue la primera empresa… / En Novalan hemos instalado… / Reciclando materiales textiles…), while en/about.html lines 445–476 list five, the extra one being \"Generating employment within clean and safe facilities, committed with the population of our region.\" and the third reading \"…more than 50 years ago — anticipating ecological law in Mexico.\"",
+  "fix": "Do not invent Spanish text. Either accept the asymmetry as inherited from the source and note it, or — if the family confirms the ES page should say the same thing — add a fifth ES <li> that is a direct rendering of the existing EN sentence, \"Generando empleo en instalaciones limpias y seguras, comprometidos con la población de nuestra región.\", and append \"anticipándose a la legislación ecológica en México\" to the San Ildefonso bullet. Confirm with the client before changing, since CONTENT.md is the binding record."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "alt-accuracy",
+  "problem": "The alt text asserts a female technician, a detail the photograph does not support and that CONTENT.md §6 does not state. productos_foto_1.jpg shows only a hand and torso in a white lab coat holding a flask of dark red dye; the subject's gender is not determinable. CONTENT.md §6 gives the gender-neutral \"Lab technician holding a flask of dye\", and the same page's procesos counterpart already uses the neutral \"Personal del laboratorio\" (procesos.html line 187).",
+  "evidence": "line 503: alt=\"Técnica de laboratorio sosteniendo un matraz con colorante\"",
+  "fix": "Change line 503 to alt=\"Personal de laboratorio sosteniendo un matraz con colorante\" — neutral, matches CONTENT.md §6 and matches the wording already used in procesos.html."
+ },
+ {
+  "file": "en/index.html",
+  "severity": "minor",
+  "category": "es-en-consistency",
+  "problem": "The EN home hero eyebrow spells the country without the accent while every other place-name string on the EN site — including this page's own footer and the EN contact page's hero eyebrow — uses the accented form taken from the CONTENT.md §5 address block.",
+  "evidence": "line 115: <p class=\"nv-label nv-hero__eyebrow\">Tulancingo, Hidalgo · Mexico</p>  (cf. line 489 <span>Tulancingo, Hidalgo · México</span> and en/contact.html line 97 which reads \"Tulancingo, Hidalgo · México\")",
+  "fix": "Change line 115 to <p class=\"nv-label nv-hero__eyebrow\">Tulancingo, Hidalgo · México</p>."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "copy-consistency",
+  "problem": "The hero button uses sentence case while CONTENT.md §1 gives the button label as \"Video Corporativo\", and the same page uses the title-case form three times below (section heading, facade label, iframe title).",
+  "evidence": "line 120: <a class=\"nv-btn nv-btn--secondary\" href=\"#video\">Video corporativo</a>  (cf. line 315 \"Video Corporativo\", line 329 \"Video Corporativo\")",
+  "fix": "Change line 120 to read \"Video Corporativo\", matching the CONTENT.md §1 button label and the rest of the page."
+ },
+ {
+  "file": "procesos.html",
+  "severity": "minor",
+  "category": "alt-accuracy",
+  "problem": "The same photograph (fabric/technical-1600) is described with two different ES alt texts across the site, so a screen-reader user meets the same image under two names.",
+  "evidence": "procesos.html line 90: alt=\"Tela técnica gris plata con ligamento de esterilla grueso\"  vs  productos.html line 470 and line 481: alt=\"Tejido técnico gris plata con ligamento panamá grueso\"",
+  "fix": "Standardise on one wording. Use the productos.html form, changing procesos.html line 90 to alt=\"Tejido técnico gris plata con ligamento panamá grueso\", so it matches CONTENT.md §6 (\"Silver-grey technical cloth with a coarse basket weave\") consistently in both places."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "duplication",
+  "problem": "The first Misión bullet is printed twice within two screens of each other: once as the hero standfirst and again as item 01 of the Misión card. The mission list must keep all its bullets, so the hero is the copy to change.",
+  "evidence": "line 99: <p class=\"nv-hero__standfirst\">Fabricar y comercializar productos textiles de excelencia en calidad, innovación y servicio, para satisfacer las necesidades de nuestros clientes.</p>\nline 173: <p class=\"nv-list__text\">Fabricar y comercializar productos textiles de excelencia en calidad, innovación y servicio, para satisfacer las necesidades de nuestros clientes.</p>",
+  "fix": "Replace the line 99 standfirst with a different sentence already in CONTENT.md §2, e.g. the Visión line \"Ser líderes en la fabricación de telas de lana en América.\" or the Mercados sentence, and leave line 173 intact. Apply the same change to en/about.html line 99, which duplicates \"To produce and commercialize textile products of excellence…\" against line 173."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "missing-source-asset",
+  "problem": "Two photographs that CONTENT.md lists in its image inventories are present on disk but referenced by no page in either language. CONTENT.md §1 names inicio_foto_1..5 as the home page's images in order; inicio_foto_5 is never used. CONTENT.md §2 names quienessomos_foto_1..9; quienessomos_foto_5 is never used.",
+  "evidence": "grep across all ten HTML files returns no match for \"inicio_foto_5\" or \"quienessomos_foto_5\"; the files exist at assets/img/photo/inicio_foto_5.webp|jpg (416×300) and assets/img/photo/quienessomos_foto_5.webp|jpg (416×300).",
+  "fix": "Place inicio_foto_5 on index.html and en/index.html — its 416×300 size fits the existing .nv-figure--3x2 slot in the 'Integración vertical' aside — with alt \"Paño de pata de gallo café y crema con sobrecuadro dorado, drapeado\" / \"Brown-and-cream houndstooth cloth with a gold overcheck, draped\" per CONTENT.md §6. Place quienessomos_foto_5 in the nosotros.html / en/about.html 'Nuestra gente' or 'Instalaciones' triptych with alt \"Operador manipulando tops negros en la línea de gilling\" / \"Operator handling black tops on the gilling line\". Or record the omission as deliberate."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "alt-accuracy",
+  "problem": "Verification item, not a build error: the alt follows CONTENT.md §6 faithfully, but the photograph does not appear to show a microscope. quienessomos_foto_3.jpg shows a woman in a masked white uniform operating a bench instrument with a large white yarn package mounted on it — a package-testing/winding instrument, not a microscope. The §6 inventory entry itself looks imprecise.",
+  "evidence": "nosotros.html line 147: alt=\"Técnica de laboratorio en el banco del microscopio\"  and en/about.html line 147: alt=\"Lab technician at the microscope bench\"  (CONTENT.md §6: quienessomos_foto_3 → \"Lab technician at the microscope bench\")",
+  "fix": "Leave as-is unless the client confirms — CONTENT.md §6 is the binding record and must not be second-guessed unilaterally. If they confirm there is no microscope, correct §6 first, then set the alt to \"Técnica de laboratorio operando un instrumento de prueba en el banco\" / \"Lab technician operating a test instrument at the bench\"."
+ },
+ {
+  "file": "index.html",
+  "severity": "major",
+  "category": "khaki-discipline",
+  "problem": "Khaki appears twice in the first viewport: the eyebrow renders `--text-accent`, which under `data-nv-theme=\"ink\"` resolves to `--nv-khaki-300`, and the primary hero button is a solid `--nv-khaki-500` fill. The design-system readme and contract §4 both require khaki once per view, at scale, not sprinkled. The same pairing repeats in productos.html:96+99, procesos.html:97+100 and the three EN counterparts.",
+  "evidence": "index.html:115 `<p class=\"nv-label nv-hero__eyebrow\">Tulancingo, Hidalgo · México</p>` (site.css:622 `.nv-hero__eyebrow { color: var(--text-accent); }`) together with index.html:119 `<a class=\"nv-btn nv-btn--accent\" href=\"productos.html\">Productos</a>` (site.css:756–759, `background: var(--nv-khaki-500)`).",
+  "fix": "Pick one carrier per hero. Change the hero's primary button to `nv-btn--secondary` (1 px paper hairline on the photograph reads correctly over the ink veil and matches the second button's weight), leaving the khaki eyebrow as the single accent. Apply the same change in productos.html:99, procesos.html:100, en/index.html:119, en/products.html:99 and en/processes.html:100."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "major",
+  "category": "khaki-discipline",
+  "problem": "The \"Medio ambiente\" ink band puts khaki on ten separate elements in one view: the rule hairline, the \"Acciones concretas\" label, and the eight list indices — because `.nv-list__index` is `--text-accent`, which flips from walnut to `--nv-khaki-300` inside `data-nv-theme=\"ink\"`. This is precisely the \"sprinkled\" pattern the system forbids; the accent stops reading as an accent. Identical in en/about.html.",
+  "evidence": "nosotros.html:393 `<div class=\"nv-rule nv-rule--accent\" …>`, nosotros.html:443 `<p class=\"nv-label nv-label--accent\">Acciones concretas</p>`, and eight instances of `<span class=\"nv-list__index nv-mono\">` between lines 403 and 470, all resolving to khaki via site.css:1006 `.nv-list__index { color: var(--text-accent); }` under the band's `data-nv-theme=\"ink\"`.",
+  "fix": "Let the eight mono numerals be the band's single khaki gesture: drop `nv-rule--accent` from line 393 (use the plain `nv-rule`) and drop `nv-label--accent` from line 443 (use plain `nv-label`). Do the same at en/about.html:393 and 443."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "major",
+  "category": "copy-structure",
+  "problem": "The eight Valores are built by tearing each source sentence in half at the bold term, so the Bodoni h3 is followed by a lowercase sentence fragment that begins mid-clause. Seven of the eight read as broken copy (\"Calidad\" / \"en todos nuestros productos, acciones y servicios.\"), while item 02 alone starts with a capital, so the column is also internally inconsistent. Same construction in en/about.html.",
+  "evidence": "nosotros.html:278–279 `<h3 class=\"nv-list__term\">Calidad</h3>` / `<p class=\"nv-list__text\">en todos nuestros productos, acciones y servicios.</p>` — and the same shape at items 03 (\"en cada una de nuestras acciones…\"), 04 (\"para con todos…\"), 05 (\"que responda…\"), 06 (\"como una forma…\"), 07 (\"con la empresa…\") and 08 (\"por nuestro trabajo…\").",
+  "fix": "Capitalise each continuation so it stands as its own sentence under the term — `<p class=\"nv-list__text\">En todos nuestros productos, acciones y servicios.</p>`, `En cada una de nuestras acciones…`, `Para con todos los integrantes…`, `Que responda de manera oportuna…`, `Como una forma de economizar…`, `Con la empresa, con nuestros clientes y proveedores.`, `Por nuestro trabajo, que nos hace sentir orgullosos de nuestros productos.` This is a permitted grammar copy-edit under contract §7 and changes no fact. Mirror in en/about.html."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "major",
+  "category": "typography",
+  "problem": "A 200-character body paragraph is set in Bodoni Moda at 28 px across a 76ch measure. `.nv-prose--wide` is 76ch and `.nv-h3` is `--type-h3` (Bodoni 400 / 28 px), so the line box runs roughly 1,060 px inside a 1,296 px container — about 90–100 characters per line in a high-contrast didone. The design system reserves Bodoni for display and caps prose at 64ch (`--container-text`); this is Bodoni doing body-copy duty at an unreadable measure.",
+  "evidence": "nosotros.html:377 `<p class=\"nv-h3 nv-prose--wide\">Nuestros productos son altamente reconocidos en los mercados nacional e internacional, principalmente en el continente americano, así como en diversos países de Europa y algunos países asiáticos como Japón, Corea y China.</p>` (site.css:165 `.nv-prose--wide { max-width: 76ch; }`, site.css:222 `.nv-h3 { font: var(--type-h3); }`). Identical at en/about.html:377.",
+  "fix": "Either set it as body — `<p class=\"nv-lede nv-prose\">` (Archivo Light, `--fs-body-lg`, 64ch) — or, if the intent is a statement, keep `.nv-h3` and cap it at `max-width: 34ch` and trim to the first clause, moving the country list into the `.nv-tag` row that already sits below it. Do not leave a 76ch Bodoni paragraph."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "major",
+  "category": "image-quality",
+  "problem": "Portrait 4:5 frames are fed landscape source photographs that are physically smaller than the frame, so the mill photography is upscaled and severely cropped. `quienessomos_foto_1/2/3` are 416×372 px rendered into a 416×520 frame (each grid-3 column is exactly 416 px at the 1440 container), forcing a 1.40× scale and a 40 % horizontal crop. Worse, the Filosofía aside puts `quienessomos_foto_4` (416×300) into a ~524 px-wide 4:5 frame — a 2.18× upscale before the display's device pixel ratio is even applied. The design direction calls for visible texture and grain; at that magnification the weave detail is gone.",
+  "evidence": "nosotros.html:118, 130, 142 `<figure class=\"nv-figure nv-figure--4x5 …\">` around `quienessomos_foto_1.jpg` (416×372), `_2` (416×372), `_3` (416×372); nosotros.html:246 the same class around `quienessomos_foto_4.jpg` (416×300); nosotros.html:518, 530, 542 around `quienessomos_foto_7/8/9.jpg` (416×300). site.css:848 `.nv-figure--4x5 { --fig-ratio: 4 / 5; }` with site.css:861–864 `object-fit: cover`.",
+  "fix": "Match the frame to the asset: use `nv-figure--3x2` (1.50, closest to the 416×300 native 1.387) for the `_4/_7/_8/_9` figures and `nv-figure--4x3`-equivalent (add `--fig-ratio: 4 / 3` alongside the existing modifiers) for the 416×372 people shots. Reserve `--4x5` for sources that are actually portrait. Same six figures in en/about.html."
+ },
+ {
+  "file": "en/index.html",
+  "severity": "major",
+  "category": "layout",
+  "problem": "The fifth key-figure tile overflows its column. At the 1440 container the strip is five equal 259.2 px columns; tiles 2–5 carry 24 px inline padding, leaving 211.2 px of content width. `1,000,000+ sq ft` at `clamp(24px, 2.6vw, 40px)` monospace (37.4 px at 1440, ~0.6 em advance) needs ~360 px and the first unbreakable run `1,000,000+` alone needs ~225 px — it overflows the tile and then breaks across three lines. The ES page is not overflowing but orphans the unit: `100,000+ m²` drops `m²` onto its own line, so the number and its unit are visually divorced, which the system explicitly forbids.",
+  "evidence": "en/index.html:158–161 `<dd class=\"nv-figures__num\">1,000,000+ sq ft</dd>`; index.html:160 `<dd class=\"nv-figures__num\">100,000+ m²</dd>`; site.css:904–911 `.nv-figures__num { font-family: var(--font-mono); font-size: clamp(24px, 2.6vw, var(--fs-display-3)); }` inside site.css:884 `grid-template-columns: repeat(5, minmax(0, 1fr))`.",
+  "fix": "Split the unit out and shrink the cap: mark up as `<dd class=\"nv-figures__num\">1,000,000+<span class=\"nv-figures__unit\">sq ft</span></dd>` and add `.nv-figures__num { font-size: clamp(20px, 2vw, var(--fs-display-4)); white-space: nowrap; } .nv-figures__unit { display: block; font-size: var(--fs-body-sm); }`. Apply to both language homes so `100,000+ m²` and `1,000,000+ sq ft` set identically."
+ },
+ {
+  "file": "contacto.html",
+  "severity": "minor",
+  "category": "micro-label",
+  "problem": "A micro-label ends in a colon. Micro-labels are typographic furniture and never take terminal punctuation (readme CONTENT FUNDAMENTALS, contract §4). The site also contradicts itself: index.html:406 renders the same label in the same component without the colon.",
+  "evidence": "contacto.html:127 `<p class=\"nv-label nv-label--ink\">Recepción de Muestras:</p>` — and en/contact.html:127 `<p class=\"nv-label nv-label--ink\">Address:</p>`. Compare index.html:406 `<p class=\"nv-label\">Recepción de Muestras</p>`.",
+  "fix": "Drop the colon on both contact pages: `Recepción de Muestras` and `Address`. CONTENT.md §5 records the source label with a colon, but stripping trailing punctuation from a label is a permitted copy-edit and is already the site's own convention on the home page."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "casing",
+  "problem": "Headline casing is inconsistent within single pages and contradicts the design system's \"sentence case for headlines, never Title Case A Whole Headline\" rule. The clearest self-contradiction: the nav and footer link says \"Quiénes somos\" while the page's own h1 says \"Quiénes Somos\". Across the ES tree, Title-Cased headlines sit next to sentence-cased ones in the same scroll.",
+  "evidence": "nosotros.html:98 `<h1 class=\"nv-hero__title\">Quiénes Somos</h1>` vs index.html:47 `<a class=\"nv-nav__link\" href=\"nosotros.html\">Quiénes somos</a>`. Other Title-Cased headings: nosotros.html:394 `Compromiso y Política Ambiental`, nosotros.html:481 `Política de Calidad`, index.html:170 `Nuestra Historia`, index.html:315 `Video Corporativo`, productos.html:97 `Nuestros Productos`, procesos.html:99 `Nuestros Procesos`, procesos.html:222 `Teñido y Acabado` — all beside sentence-cased siblings such as `Integración vertical`, `Nuestra gente`, `Familias de tela`, `Nuestro grupo`, `Todo el proceso productivo`.",
+  "fix": "Normalise every ES headline to sentence case: `Quiénes somos`, `Nuestra historia`, `Nuestros productos`, `Nuestros procesos`, `Video corporativo`, `Política de calidad`, `Compromiso y política ambiental`, `Teñido y acabado`. Proper nouns (San Ildefonso, Novalan, Don Juan Morera, Familia Morera) keep their capitals. Leave the EN pages in their existing form only if you also normalise them; do not end up with one convention per language."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "cross-page-coherence",
+  "problem": "The hero plinth — the paper shelf under the hero image that every other page uses to hold a left-hand fact and a right-hand scroll cue — is inconsistent across the five pages. nosotros/en-about ship only the cue, and because `.nv-hero__plinth` is `display:flex; justify-content:space-between`, a lone child lands at the *left* edge, so the cue jumps sides relative to index/productos/procesos. contacto/en-contact drop the plinth entirely, so the contact hero has no shelf and no cue at all. Combined with three different hero ratios (`nv-hero` 21:9, `nv-hero--compact` 21:7, `nv-hero--16x9` 16:9), the hero reads as a different component on each page.",
+  "evidence": "nosotros.html:103–108 — `<div class=\"nv-hero__plinth nv-container\">` containing only `<a class=\"nv-hero__cue\" href=\"#proposito\">`; contacto.html:85–101 — `<section class=\"nv-hero nv-hero--16x9\">` ends at `</div></section>` with no `.nv-hero__plinth`. Compare index.html:125–132 (lockup + cue) and productos.html:107–113 (mono count label + cue). site.css:649–658 `.nv-hero__plinth { display:flex; justify-content: space-between; }`.",
+  "fix": "Two changes. (1) Add `.nv-hero__cue { margin-inline-start: auto; }` so the cue is pinned right regardless of whether a left-hand item exists. (2) Give nosotros a left-hand fact in the same register as its siblings — `<p class=\"nv-label\"><span class=\"nv-mono\">8</span> valores</p>` — and add the plinth to contacto.html/en/contact.html with `<p class=\"nv-label\">C.P. <span class=\"nv-mono\">43626</span></p>` plus a cue to `#datos`. Then settle on two hero ratios, not three: home at 21:9 and every interior page at `--compact`, retiring `--16x9`."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "content-fidelity",
+  "problem": "The closing band introduces a quotation service. CONTENT.md contains no quote, sample, pricing or enquiry offer anywhere — the original site's only calls to action were the phone numbers, the e-mail address and \"Ver mapa\". Contract §7 forbids adding a service that is not in the source. It is also the only CTA band on the site with a different shape: the other four pages all close with the company name plus the address block.",
+  "evidence": "productos.html:548–549 `<h2 class=\"nv-cta__title\" id=\"contacto-title\">Solicita una cotización</h2>` / `<p class=\"nv-lede nv-prose\">Escríbenos por correo electrónico o llámanos por teléfono.</p>`; en/products.html:548–549 `Request a quotation` / `Write to us by e-mail or call us by phone.` Compare index.html:405, nosotros.html:567, procesos.html:369, all `Novalan, S.A. de C.V.` followed by the `Recepción de Muestras` address.",
+  "fix": "Replace the title with `Novalan, S.A. de C.V.` and restore the same `nv-cta__body` used on the other three pages (the `nv-label` \"Recepción de Muestras\" plus the `<address class=\"nv-cta__addr\">` block), keeping the mail and Contacto buttons in `nv-cta__aside`. That removes the invented service and makes the closing band identical across all four non-contact pages."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "information-architecture",
+  "problem": "The page closes with three navigations stacked inside the last screen and a half: the \"Secciones\" card row, the ink CTA band, and the footer's Navegación column — plus the sticky header nav still on screen. The card row is the weakest of the three: three fabric photographs with a title and a count, no new information, and it is the most template-like block in the build (a stock \"explore more\" strip). It also repeats two of the four links the footer lists immediately below it.",
+  "evidence": "index.html:338–395 `<section … id=\"secciones\">` with a `nv-sr-only` h2 and three `.nv-card--interactive` tiles reading `Nuestros Productos` / `13 familias de producto`, `Nuestros Procesos` / `5 etapas`, `Quiénes Somos` / `Misión · Visión · Valores` — followed at 399 by the ink CTA band and at 443 by the footer's own four-link Navegación column. Same block at procesos.html:325 onward and in both EN counterparts.",
+  "fix": "Cut the `Secciones` section from index.html and procesos.html (and en/index.html, en/processes.html) and let the ink CTA band close the page. If a forward link is wanted, keep one only — a single full-bleed `nv-band--image` with one Bodoni line and one `nv-link-arrow` — which is a house gesture rather than a card row."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "redundancy",
+  "problem": "The address, both phone numbers and the e-mail are printed twice in the last 700 px of every non-contact page: once in the ink CTA band and again in the ink footer's Contacto column, in the same ink treatment. Because `.nv-footer` carries `margin-block-start: var(--section-y)`, a 96 px stripe of paper separates the two ink blocks, so the repetition reads as an accident rather than a deliberate coda.",
+  "evidence": "index.html:407–427 (address, `tel:+527757551123`, `tel:+527757530389`, `mailto:info@novalanfabrics.com.mx`) repeated verbatim at index.html:462–472; site.css:519 `.nv-footer { … margin-block-start: var(--section-y); }`. Same duplication in nosotros.html, procesos.html, productos.html and all four EN counterparts.",
+  "fix": "Let the ink band and the ink footer be one continuous closing block: remove `margin-block-start` from `.nv-footer` on pages that end in a `nv-band--ink`, and strip the repetition by keeping the address + \"Ver mapa\" in the band and reducing the footer's Contacto column to the two `tel:` links and the `mailto:` only (or vice versa). The footer's Navegación and Grupo columns are unaffected."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "layout",
+  "problem": "Thirteen fabric families in a fixed 3-up grid produce four full rows and one orphan card sitting alone at the left of row five, with two empty columns beside it. On a page whose entire argument is the completeness of the range, the grid ends on a visual stumble.",
+  "evidence": "productos.html:194 `<div class=\"nv-grid-3\">` containing thirteen `<article class=\"nv-card nv-card--interactive …\">` blocks, the last being `13` / `Tejidos técnicos y de alto desempeño` at productos.html:465–487. site.css:181 `.nv-grid-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }`. Same in en/products.html.",
+  "fix": "Promote the first card to a full-width lead so the remaining twelve fill four clean rows of three: add `.nv-card--lead { grid-column: 1 / -1; }` and put its figure in `nv-figure--21x9` using the existing `fashion-apparel-1600` asset. That uses the family that is already the site's hero image, keeps the count at thirteen, and removes the orphan without inventing content."
+ },
+ {
+  "file": "contacto.html",
+  "severity": "minor",
+  "category": "design-substance",
+  "problem": "The right-hand card is a decorative panel standing in for a map: a herringbone weave texture with two crossed hairlines and a pin square at the centre, carrying no geographic information at all. The crosshair centres on nothing — the pin is at 50%/50% of an abstract field — so it reads as an unfinished placeholder rather than a designed plate, and it is the largest single element on the page.",
+  "evidence": "contacto.html:156–167 `<div class=\"nv-map nv-weave-herringbone\">` with `.nv-map__pin` and `.nv-map__coords` `20.1041683, -98.3656604`; site.css:1455–1501 `.nv-map { aspect-ratio: 16/10; }` plus `::before`/`::after` crossing hairlines. Same at en/contact.html:156.",
+  "fix": "Replace the plate with a real photograph of the place — `assets/img/photo/inicio_foto_3` (the corporate entrance, 800×450) in a `nv-figure--16x10` frame with the caption `Novalan, S.A. de C.V. · Tulancingo, Hidalgo` — and keep the coordinates in the existing `nv-spec` list beside the postal code. That gives the card real content, uses an asset already on disk, and preserves the zero-network requirement that motivated the drawn plate."
+ },
+ {
+  "file": "contacto.html",
+  "severity": "minor",
+  "category": "micro-label",
+  "problem": "A spec row repeats its own label inside its value and carries a stray colon. The label already says \"Código postal\", so \"C.P.: 43626\" states it twice and puts punctuation into a mono value.",
+  "evidence": "contacto.html:172–173 `<dt class=\"nv-spec__label\">Código postal</dt>` / `<dd class=\"nv-spec__value\">C.P.: 43626</dd>`; same at en/contact.html:172–173 (`Postal code` / `C.P.: 43626`).",
+  "fix": "Set the value to the bare number: `<dd class=\"nv-spec__value\">43626</dd>`. The `C.P.` form is still carried, correctly, in the address block above (contacto.html:135 `<span class=\"nv-mono\">C.P.: 43626</span>`) and in the footer address."
+ },
+ {
+  "file": "procesos.html",
+  "severity": "minor",
+  "category": "cross-page-coherence",
+  "problem": "Two different section-index schemes are in use. index.html, nosotros.html, productos.html and contacto.html run a page-wide counter on every labelled rule (`01 / 06` … `06 / 06`, `01 / 09` … `09 / 09`, `01 / 04` … `04 / 04`, `01 / 02` … `02 / 02`). procesos.html instead numbers only the five stages `01 / 05` … `05 / 05` and leaves three rules with no index at all, so the reader loses the running position exactly on the page that has the most sections.",
+  "evidence": "procesos.html:118 `<div class=\"nv-rule\" …><span class=\"nv-rule__label\">Las cinco etapas</span><i></i></div>` (no `nv-rule__index`), likewise procesos.html:299 `Control` and procesos.html:327 `Secciones` — against procesos.html:161 `<span class=\"nv-rule__index\">01 / 05</span>`. Compare index.html:138 `01 / 06` through index.html:401 `06 / 06`. Same split in en/processes.html.",
+  "fix": "Pick the page-wide counter, which is the majority pattern and the one a reader can act on: renumber procesos.html's nine rules `01 / 09` … `09 / 09` and move the stage number into the stage's own label (`<span class=\"nv-rule__label\">Etapa 01</span>` reads as furniture and keeps the sequence legible). Mirror in en/processes.html."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "asset-integrity",
+  "problem": "The yarns family is the only one of the thirteen whose `-1600` asset is not actually 1600 px: `assets/img/fabric/yarns-1600.jpg` is 800×452. The lightbox opens it as the full-screen view and the dialog markup declares `width=\"1600\" height=\"842\"`, so the image is upscaled roughly 2× on a desktop viewport and is visibly softer than the other twelve slides, and the declared intrinsic ratio (1.90) does not match the file (1.77), producing a reflow the moment the real image decodes.",
+  "evidence": "productos.html:456 `data-nv-src=\"assets/img/fabric/yarns-1600.jpg\"` (file measures 800×452, while every other `-1600` measures 1600×842); productos.html:642 `<img class=\"nv-lightbox__img\" data-nv-lightbox-img src=\"\" alt=\"\" width=\"1600\" height=\"842\">`. Same at en/products.html.",
+  "fix": "Two parts. (1) Ask for a true 1600×842 `yarns-1600` crop, or point the yarns opener at `yarns-800.jpg` so the lightbox is not asked to upscale. (2) Stop hard-coding the dialog's dimensions to one family's ratio — have site.js set `width`/`height` from `data-nv-w` / `data-nv-h` attributes carried by each opener, alongside the `data-nv-src` it already reads in `render()` (assets/js/site.js:180–195)."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "markup",
+  "problem": "The lightbox image ships with an empty `src` attribute. An empty `src` is not a no-op: several browsers resolve it against the document URL and issue a second request for the HTML page itself, which is then decoded as an image and fails. It is invisible in normal use but it is a spurious network request on a site whose whole premise is zero network dependencies until the visitor clicks play.",
+  "evidence": "productos.html:642 `<img class=\"nv-lightbox__img\" data-nv-lightbox-img src=\"\" alt=\"\" width=\"1600\" height=\"842\">` and productos.html:641 `<source type=\"image/webp\" data-nv-lightbox-source srcset=\"\">`; same lines in en/products.html.",
+  "fix": "Remove the empty `src` and `srcset` attributes entirely — site.js already sets both in `render()` before the dialog is shown (assets/js/site.js:188–192 `source.setAttribute('srcset', webp)` / `img.setAttribute('src', jpg)`), so nothing else has to change."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "performance",
+  "problem": "The header wordmark carries `loading=\"lazy\"`. It is the first painted brand element, always above the fold and inside the sticky header, so lazy-loading it delays it behind the layout pass for no benefit. The same markup is on all ten pages (line 42 on index.html/en/index.html, line 24-ish region on the other eight).",
+  "evidence": "`<img class=\"nv-header__logo\" src=\"assets/brand/novalan-lockup-wordmark.png\" alt=\"Novalan\" width=\"600\" height=\"88\" loading=\"lazy\" decoding=\"async\">`",
+  "fix": "Remove `loading=\"lazy\"` from the `.nv-header__logo` `<img>` on all ten pages (keep `decoding=\"async\"`). Leave the `.nv-drawer__logo` copy lazy — it is genuinely off-screen."
+ },
+ {
+  "file": "productos.html",
+  "severity": "minor",
+  "category": "performance",
+  "problem": "The lightbox `<img>` carries hard-coded `width=\"1600\" height=\"842\"` and site.js only rewrites `src`/`srcset`/`alt` in `render()`, never the dimensions. Twelve of the thirteen `-1600` fabric files really are 1600×842, but `assets/img/fabric/yarns-1600.jpg` and `.webp` are only 800×452 — the file is byte-identical in size to the `-800` variant. So slide 12 declares a 1.90 aspect ratio for a 1.77 image and is upscaled ~1.6× in a full-screen dialog.",
+  "evidence": "productos.html line 644 `<img class=\"nv-lightbox__img\" data-nv-lightbox-img src=\"\" alt=\"\" width=\"1600\" height=\"842\">` (same at en/products.html line 644); on disk `yarns-1600.jpg` = 800×452 and `yarns-1600.webp` = 800×452, while every other `-1600` file is 1600×842.",
+  "fix": "In site.js `render()`, also copy per-item dimensions: add `data-nv-w`/`data-nv-h` attributes to each `[data-nv-lightbox-open]` button and set `img.setAttribute('width', …)` / `img.setAttribute('height', …)` alongside the existing `src`/`alt` calls, so the yarns slide declares 800×452."
+ },
+ {
+  "file": "en/index.html",
+  "severity": "minor",
+  "category": "responsive",
+  "problem": "The key-figures strip is five equal columns above 1180 px, and the English value `1,000,000+ sq ft` is set in `--font-mono` at `clamp(24px, 2.6vw, 40px)`. Digit groups separated by commas carry no line-break opportunity, so `1,000,000+` must fit on one line. Between roughly 1181 px and 1400 px the cell's content box (column width minus the 24 px inline padding) is narrower than that string — e.g. at a 1280 px viewport the cell content box is ~179 px while `1,000,000+` at 33 px monospace needs ~183–200 px depending on the fallback face — and the number spills across the hairline into the neighbouring cell. The Spanish counterpart (`100,000+ m²`, two characters shorter) fits.",
+  "evidence": "en/index.html line 160 `<dd class=\"nv-figures__num\">1,000,000+ sq ft</dd>` with site.css lines 878–905 `.nv-figures { grid-template-columns: repeat(5, minmax(0, 1fr)); }` and `.nv-figures__num { font-size: clamp(24px, 2.6vw, var(--fs-display-3)); }`.",
+  "fix": "Lower the upper bound of the clamp for this strip, e.g. `.nv-figures__num { font-size: clamp(20px, 2.1vw, var(--fs-display-4)); overflow-wrap: anywhere; }`, or move the unit onto its own line by marking it up as `<dd class=\"nv-figures__num\">1,000,000+<span class=\"nv-figures__unit\">sq ft</span></dd>` with the unit set to `display: block`."
+ },
+ {
+  "file": "nosotros.html",
+  "severity": "minor",
+  "category": "performance",
+  "problem": "The \"Instalaciones\" triptych puts three landscape 416×300 photographs into `.nv-figure--4x5` portrait frames. At the 1440 px container each grid-3 column is ~416 px wide, so the frame is 416×520; covering it from a 300 px-tall source means scaling ×1.73 and discarding ~42 % of the image width. Below 900 px the grid drops to two columns and the upscale gets worse. The same applies to `procesos_*`, `productos_foto_*` and `quienessomos_foto_4/5/7/8/9`, all of which are 416×300 on disk.",
+  "evidence": "nosotros.html lines 512, 524, 536: `<figure class=\"nv-figure nv-figure--4x5 …\">` wrapping `<img … src=\"assets/img/photo/quienessomos_foto_7.jpg\" width=\"416\" height=\"300\">` (actual file: 416×300).",
+  "fix": "Use a frame ratio the source can actually fill — `nv-figure--3x2` (or `--16x10`) for the 416×300 photos — and reserve `nv-figure--4x5` for `quienessomos_foto_1/2/3`, which are 416×372 and crop far less."
+ },
+ {
+  "file": "index.html",
+  "severity": "minor",
+  "category": "contract",
+  "problem": "Contract §5.3 specifies the YouTube facade shows \"a fabric still\". The facade instead uses `assets/img/photo/procesos_foto_1.jpg`, which is a mill photograph and only 800×320 on disk. `.nv-video` is a 16:9 box at full container width (up to 1296 px at 1440 px), so the still is upscaled ~1.6× and its 2.5:1 crop is cover-cropped vertically into 1.78:1, losing about 29 % of its height.",
+  "evidence": "index.html line 320 `<img class=\"nv-video__img\" src=\"assets/img/photo/procesos_foto_1.jpg\" width=\"800\" height=\"320\" …>` inside `<button class=\"nv-video__facade\">`; same at en/index.html.",
+  "fix": "Swap the facade still for a 19:10 fabric file that comfortably covers the 16:9 box at full width, e.g. `assets/img/fabric/hero-alt-1900.jpg|webp` (1900×1000) or `worsted-wool-1600` (1600×842), and update `width`/`height` and the `alt` to the matching CONTENT.md §6 description."
+ },
+ {
+  "file": "contacto.html",
+  "severity": "minor",
+  "category": "accessibility",
+  "problem": "On every other page the footer navigation link that points at the current page carries `aria-current=\"page\"` (nosotros.html:615, productos.html:592, procesos.html:419 and the EN equivalents). On the contact pages the header CTA and the drawer link are marked but the footer nav link to the same page is not, so the footer nav on those two pages exposes no current-page state.",
+  "evidence": "contacto.html line 40 `<a … class=\"… nv-header__cta\" href=\"contacto.html\" aria-current=\"page\">` and line 66 (drawer) are marked, but the footer list item `<li><a class=\"nv-footer__link\" href=\"contacto.html\">Contacto</a></li>` is not. Same in en/contact.html.",
+  "fix": "Add `aria-current=\"page\"` to the footer `Contacto` link in contacto.html and to the footer `Contact` link in en/contact.html."
+ }
+]

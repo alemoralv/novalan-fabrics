@@ -1,0 +1,14 @@
+/* Novalan webfonts — self-hosted, and deliberately NOT imported from here.
+
+   The design system ships this file as an @import from Google Fonts. This build serves the same
+   three faces from assets/fonts/ instead, so the site renders identically with no network access.
+
+   The faces are linked straight from each page's <head>:
+
+       <link rel="stylesheet" href="assets/fonts/fonts.css">     (../assets/… inside a locale folder)
+
+   That is one hop instead of three (page → novalan-tokens.css → tokens/fonts.css → fonts/fonts.css),
+   which matters because nothing can paint text until the @font-face rules have arrived. Importing
+   here as well would declare every face twice for no benefit.
+
+   Bodoni Moda (display), Archivo (UI/body), Pinyon Script (tagline lockup only) — all OFL 1.1. */

@@ -1,0 +1,22 @@
+<!-- @dsCard group="Components" viewport="700x320" name="Textile" subtitle="Swatches, spec lists, figure frames" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--surface-page);padding:22px 26px}.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.stack{display:grid;gap:18px}.cap{font:var(--type-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-muted)}</style>
+</head><body><div id="root"></div><script type="text/babel">
+window.NV_ASSETS="";
+const NV=window.NovalanDesignSystem_054783;
+const {Swatch,SpecList,Figure}=NV;
+function Demo(){const [s,setS]=React.useState("Nogal");
+const sw=[["Negro","NV-0B0B","var(--nv-ink-900)","plain"],["Nogal","NV-4A37","var(--nv-walnut-700)","twill"],["Khaki","NV-A89B","var(--nv-khaki-500)","herringbone"],["Crudo","NV-D8CF","var(--nv-khaki-100)","plain"]];
+return <div style={{display:"grid",gridTemplateColumns:"auto 1fr 150px",gap:32,alignItems:"start"}}>
+<div className="row" style={{gap:12,maxWidth:230}}>{sw.map(([n,c,col,w])=><Swatch key={n} name={n} code={c} color={col} weave={w} size={72} selected={s===n} onClick={()=>setS(n)}/>)}</div>
+<SpecList items={[{label:"Composición",value:"100% lino europeo",mono:false},{label:"Gramaje",value:"240 g/m²"},{label:"Ancho",value:"150 cm"},{label:"Acabado",value:"Lavado enzimático",mono:false},{label:"Lote",value:"NV-0042"}]}/>
+<Figure ratio="4 / 5" tone="khaki" weave="canvas" label="Flat-lay" caption="Lino lavado, Puebla"/>
+</div>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script></body></html>

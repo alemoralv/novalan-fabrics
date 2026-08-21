@@ -1,0 +1,11 @@
+:root{
+--space-0:0;--space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:24px;--space-6:32px;
+--space-7:48px;--space-8:64px;--space-9:96px;--space-10:128px;--space-11:160px;
+/* layout */
+--page-margin:72px;--page-margin-sm:24px;--gutter:24px;--gutter-tight:2px; /* @kind spacing */
+--container-max:1440px;--container-text:64ch; /* @kind spacing */
+--section-y:96px;--section-y-lg:128px; /* @kind spacing */
+/* control geometry */
+--control-h-sm:32px;--control-h:44px;--control-h-lg:52px; /* @kind spacing */
+--control-px:30px;--control-px-sm:18px; /* @kind spacing */
+}

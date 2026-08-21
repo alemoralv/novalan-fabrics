@@ -1,0 +1,7 @@
+/* Novalan webfonts.
+   SUBSTITUTION NOTE: no licensed brand fonts were supplied. The wordmark is a high-contrast
+   didone; Bodoni Moda is the closest Google Fonts match. Archivo covers UI/body, Pinyon Script
+   stands in for the engraved script of the "Weaving beauty since 1983" tagline.
+   Served from Google Fonts — swap these @import lines for local @font-face rules when the
+   licensed files arrive. */
+@import url("https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;1,6..96,400;1,6..96,500&family=Archivo:wght@300;400;500;600&family=Pinyon+Script&display=swap");

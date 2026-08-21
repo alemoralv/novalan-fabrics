@@ -1,0 +1,24 @@
+<!-- @dsCard group="Components" viewport="700x240" name="Brand" subtitle="Wordmark lockups, icon set, hairline rules" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--surface-page);padding:22px 26px}.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}.stack{display:grid;gap:18px}.cap{font:var(--type-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-muted)}</style>
+</head><body><div id="root"></div><script type="text/babel">
+window.NV_ASSETS="../../assets/";
+const NV=window.NovalanDesignSystem_054783;
+const {Wordmark,Icon,Rule}=NV;
+function Demo(){return <div className="stack">
+<div className="row" style={{gap:36,alignItems:"flex-end"}}>
+<Wordmark variant="full" width={190}/>
+<Wordmark variant="wordmark" width={130}/>
+<span style={{background:"var(--nv-ink-900)",padding:"14px 18px"}}><Wordmark variant="wordmark" tone="paper" width={130}/></span>
+</div>
+<Rule label="Iconos 1.25px"/>
+<div className="row" style={{gap:22,color:"var(--text-primary)"}}>{["scissors","ruler","package","search","shopping-bag","heart","truck","leaf","user","arrow-right"].map(n=><Icon key={n} name={n} size={20}/>)}</div>
+</div>;}
+ReactDOM.createRoot(document.getElementById('root')).render(<Demo/>);
+</script></body></html>

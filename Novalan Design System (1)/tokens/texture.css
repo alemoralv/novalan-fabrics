@@ -1,0 +1,16 @@
+:root{
+/* Weave textures are core to the brand. Built from gradients so they scale and recolor.
+   --nv-weave-* are drop-in background values; .nv-weave-* are utility classes. */
+--weave-plain:repeating-linear-gradient(0deg,rgba(11,11,11,.07) 0 1px,transparent 1px 4px),repeating-linear-gradient(90deg,rgba(11,11,11,.07) 0 1px,transparent 1px 4px); /* @kind other */
+--weave-twill:repeating-linear-gradient(45deg,rgba(11,11,11,.09) 0 1px,transparent 1px 5px); /* @kind other */
+--weave-herringbone:repeating-linear-gradient(45deg,rgba(11,11,11,.08) 0 1px,transparent 1px 6px),repeating-linear-gradient(-45deg,rgba(11,11,11,.08) 0 1px,transparent 1px 6px); /* @kind other */
+--weave-canvas:repeating-linear-gradient(45deg,var(--nv-khaki-500) 0 6px,var(--nv-khaki-300) 6px 12px); /* @kind other */
+--weave-selvedge:repeating-linear-gradient(90deg,var(--nv-ink-900) 0 2px,transparent 2px 8px); /* @kind other */
+--grain:radial-gradient(rgba(11,11,11,.05) .5px,transparent .5px); /* @kind other */
+--grain-size:3px 3px; /* @kind other */
+}
+.nv-weave-plain{background-image:var(--weave-plain)}
+.nv-weave-twill{background-image:var(--weave-twill)}
+.nv-weave-herringbone{background-image:var(--weave-herringbone)}
+.nv-weave-canvas{background-image:var(--weave-canvas)}
+.nv-grain{background-image:var(--grain);background-size:var(--grain-size)}

@@ -1,0 +1,19 @@
+<!-- @dsCard group="Motion" viewport="700x190" name="Hover and press" subtitle="Ink → walnut on hover · .86 opacity on press" -->
+<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><link rel="stylesheet" href="../styles.css">
+<style>body{margin:0;padding:20px 22px;background:var(--surface-page)}.tok{font-family:var(--font-mono);font-size:9px;color:var(--text-muted)}</style></head><body>
+<style>
+.b{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 30px;font:var(--type-button);letter-spacing:var(--ls-label-tight);text-transform:uppercase;border:1px solid var(--nv-ink-900);background:var(--nv-ink-900);color:var(--nv-paper-300);transition:var(--transition-ink);cursor:pointer}
+.b:hover{background:var(--nv-walnut-700);border-color:var(--nv-walnut-700)}
+.b:active{opacity:.86}
+.s{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 30px;font:var(--type-button);letter-spacing:var(--ls-label-tight);text-transform:uppercase;border:1px solid var(--border-solid);background:transparent;transition:var(--transition-ink);cursor:pointer}
+.s:hover{background:var(--state-hover-surface)}
+.lk{font:var(--type-body);font-size:15px;color:var(--text-link);text-decoration:underline;text-underline-offset:4px;transition:var(--transition-ink)}
+.lk:hover{color:var(--text-link-hover)}
+.im{width:120px;height:76px;background:var(--nv-khaki-500);background-image:var(--weave-twill);overflow:hidden}
+.im span{display:block;width:100%;height:100%;transition:transform var(--dur-slow) var(--ease-out-soft);background-image:var(--weave-herringbone)}
+.im:hover span{transform:scale(1.04)}
+</style>
+<div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+<button class="b">Primario</button><button class="s">Secundario</button><a class="lk" href="#">Enlace de texto</a><div class="im"><span></span></div>
+</div>
+<div class="tok" style="margin-top:14px">Hover: color only. Press: opacity .86 — nothing scales down. Imagery: 1.04 scale, 420 ms.</div></body></html>

@@ -1,0 +1,15 @@
+/* Minimal element defaults so consumers inherit the voice of the system. */
+html{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+body{margin:0;background:var(--surface-page);color:var(--text-primary);font:var(--type-body);text-wrap:pretty}
+h1,h2,h3,h4{margin:0;font-family:var(--font-display);font-weight:var(--fw-display);letter-spacing:var(--ls-display)}
+h1{font-size:var(--fs-display-2);line-height:var(--lh-display)}
+h2{font-size:var(--fs-display-3);line-height:var(--lh-display)}
+h3{font-size:var(--fs-display-4);line-height:1.15}
+h4{font-size:var(--fs-display-5);line-height:1.2}
+p{margin:0 0 var(--space-4)}
+a{color:var(--text-link);text-decoration:underline;text-underline-offset:4px;text-decoration-thickness:1px;transition:var(--transition-ink)}
+a:hover{color:var(--text-link-hover)}
+::selection{background:var(--nv-khaki-300);color:var(--nv-ink-900)}
+:focus-visible{outline:1px solid var(--focus-ring);outline-offset:2px}
+.nv-label{font:var(--type-label);letter-spacing:var(--ls-label);text-transform:uppercase;color:var(--text-muted)}
+.nv-rule{height:1px;background:var(--border-hairline);border:0}
