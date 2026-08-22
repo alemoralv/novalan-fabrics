@@ -4,18 +4,30 @@
    an adaptation of the "Tejido Scroll" study, recoloured with the Novalan
    design-system palette. Canvas only: no captions, no HUD, no text.
 
-   Two variants, both purely decorative (aria-hidden in the markup):
+   Variants, all purely decorative (aria-hidden in the markup):
 
-     variant="edges"  pale threads (paper / khaki / walnut) behind a text
-                      section. The element measures where the section's text
-                      actually sits and erases the cloth behind it, so the
-                      weave only shows in the side margins. If neither margin
-                      is wide enough (small screens, CJK measures) it hides
-                      itself completely.
+     variant="edges"     pale threads (paper / khaki / walnut) behind a text
+                         section. The element measures where the section's
+                         text actually sits and erases the cloth behind it,
+                         so the weave only shows in the side margins. If
+                         neither margin is wide enough (small screens, CJK
+                         measures) it hides itself completely.
 
-     variant="band"   the original dark colourway translated to Novalan tokens
-                      (ink / paper / brick / khaki), full-bleed inside
-                      .nv-band__media, behind the band's existing veil.
+     variant="backdrop"  the same pale cloth, but full-bleed and knocked back
+                         to ~45% so photographs and labels float on it. No
+                         measuring, no hiding.
+
+     variant="band"      the study's dark colourway translated to Novalan
+                         tokens (ink / paper / brick / khaki), full-bleed
+                         inside .nv-band__media, behind the band's veil.
+
+   axis="x" weaves horizontally — the warp runs across and the picks advance
+   left to right as the visitor scrolls — for wide, short blocks like the
+   quote bands. Internally the loom is drawn in a rotated "virtual" space, so
+   the weaving logic is shared by both orientations.
+
+   The element injects its own placement styles below, so it renders correctly
+   even when a cached copy of site.css predates section 30 of that file.
 
    Without JavaScript the element stays empty: the band's --nv-ink-900
    background and the page's paper show through, and nothing else depends on
@@ -28,8 +40,30 @@
 
   if (!window.customElements || customElements.get('nv-weave')) { return; }
 
+  /* Placement styles. Duplicated in site.css §30 on purpose: this copy is the
+     safety net against a stale cached stylesheet (a canvas left unstyled sits
+     at its default 300×150 in a corner). Injected after the <link>s, so on a
+     fresh site.css these rules simply restate what is already true. */
+  var CSS =
+    'nv-weave{display:block;pointer-events:none}' +
+    'nv-weave canvas{display:block}' +
+    '.nv-section--weave{position:relative;isolation:isolate}' +
+    'main:has(> .nv-section--weave){overflow-x:clip}' +
+    '.nv-weave--edges,.nv-weave--backdrop{position:absolute;inset-block:0;' +
+      'left:calc(50% - 50vw);width:100vw;z-index:-1;overflow:clip}' +
+    '.nv-weave--edges canvas,.nv-weave--backdrop canvas{position:sticky;top:0;' +
+      'width:100%;height:100vh;height:100svh}' +
+    '.nv-weave--band{position:absolute;inset:0}' +
+    '.nv-weave--band canvas{position:absolute;inset:0;width:100%;height:100%}' +
+    '.nv-band--weave{min-height:44svh}' +
+    '@media (max-width:900px){.nv-weave--edges{display:none}}';
+  var style = document.createElement('style');
+  style.setAttribute('data-nv-weave', '');
+  style.textContent = CSS;
+  document.head.appendChild(style);
+
   var PALETTES = {
-    /* edges — khaki/walnut threads over the page's paper */
+    /* edges / backdrop — khaki/walnut threads over the page's paper */
     paper: {
       bg: null,                          /* transparent: the page is the ground */
       dark: '#C4B995',                   /* --nv-khaki-300 */
@@ -55,10 +89,11 @@
     }
   };
 
-  var PAD = 40;    /* px kept fully clear around measured text (edges)   */
-  var FADE = 120;  /* px over which the horizontal erase feathers out    */
-  var FADE_V = 120;/* px of fade at the section's top and bottom (edges) */
-  var STRIP = 140; /* a side margin narrower than this shows no weave    */
+  var PAD = 40;      /* px kept fully clear around measured text (edges)   */
+  var FADE = 120;    /* px over which the horizontal erase feathers out    */
+  var FADE_V = 120;  /* px of fade at the section's top and bottom         */
+  var STRIP = 140;   /* a side margin narrower than this shows no weave    */
+  var BACKDROP = 0.45; /* opacity the backdrop variant is knocked back to  */
 
   var clamp = function (v, a, b) { return v < a ? a : v > b ? b : v; };
   var norm = function (v, a, b) { return clamp((v - a) / (b - a), 0, 1); };
@@ -75,7 +110,13 @@
       if (this._ready) { return; }
       this._ready = true;
 
-      this.band = this.getAttribute('variant') === 'band';
+      var mode = this.getAttribute('variant');
+      this.band = mode === 'band';
+      this.backdrop = mode === 'backdrop';
+      this.edges = !this.band && !this.backdrop;
+      /* the edges variant erases a vertical column of itself; that only makes
+         sense with a vertical warp, so axis="x" is honoured everywhere else */
+      this.horiz = this.getAttribute('axis') === 'x' && !this.edges;
       this.pal = this.band ? PALETTES.ink : PALETTES.paper;
 
       var canvas = document.createElement('canvas');
@@ -141,10 +182,9 @@
       this.SH = this.band ? r.height : this.getBoundingClientRect().height;
       this.canvas.width = Math.round(this.W * this.dpr);
       this.canvas.height = Math.round(this.H * this.dpr);
-      this.noisePat = null;                 /* pattern belongs to the old context state */
+      this.noisePat = null;               /* pattern belongs to the old context state */
       this.pitch = this.band ? 16 : 13;
-      this.cols = Math.ceil(this.W / this.pitch);
-      if (!this.band) { this.measureText(); }
+      if (this.edges) { this.measureText(); }
       this.dirty = true;
     }
 
@@ -172,7 +212,7 @@
         if (b.left < L) { L = b.left; }
         if (b.right > R) { R = b.right; }
       }
-      if (L === Infinity) {                  /* no text found: show nothing */
+      if (L === Infinity) {                /* no text found: show nothing */
         this.showL = this.showR = false;
       } else {
         this.eraseX0 = L - selfL - PAD;
@@ -192,11 +232,20 @@
       var vh = innerHeight;
       if (r.bottom < -60 || r.top > vh + 60) { return; }
 
+      /* self-heal: if the stored size drifted from the live one — a resize
+         signal was missed, or the stylesheet arrived after first measure —
+         re-measure before drawing instead of painting at the stale size */
+      if (Math.abs(r.width - this.W) > 1 ||
+          (this.band && Math.abs(r.height - this.H) > 1)) {
+        this.resize();
+        if (this.hiddenBySize || !this.W) { return; }
+      }
+
       /* progress: 0 as the top enters the viewport bottom, 1 as the bottom
          leaves the top — no pinning, the page scrolls as it always did */
       var target = reduced ? 1 : clamp((vh - r.top) / (vh + r.height), 0, 1);
 
-      /* scroll offset of the sticky canvas inside the section (edges) */
+      /* scroll offset of the sticky canvas inside the section */
       var off = this.band ? 0 : clamp(-r.top, 0, Math.max(0, r.height - this.H));
 
       var dt = Math.min(120, now - (this._last || now - 16));
@@ -217,10 +266,17 @@
 
     draw(p, off, now) {
       var ctx = this.ctx, W = this.W, H = this.H, P = this.pal;
-      var pitch = this.pitch, cols = this.cols;
-      var SH = this.SH;
-      var rows = Math.ceil(SH / pitch);
+      var pitch = this.pitch, SH = this.SH;
+      var horiz = this.horiz;
       var i;
+
+      /* the loom's virtual space: x runs across the warp, y along the cloth.
+         Vertical: virtual == section coords. Horizontal: the space is rotated
+         so the cloth advances along the real x axis instead. */
+      var AX = horiz ? SH : W;            /* extent across the warp        */
+      var PX = horiz ? W : SH;            /* extent along the progression  */
+      var cols = Math.ceil(AX / pitch);
+      var rows = Math.ceil(PX / pitch);
 
       ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
       ctx.clearRect(0, 0, W, H);
@@ -240,28 +296,36 @@
       var drape = this.band && !reduced ? norm(p, 0.55, 0.90) : 0;
       var amp = 4.5 * drape;
       var ph = now * 0.00035;
-      var freq = Math.PI * 3 / W;
+      var freq = Math.PI * 3 / AX;
 
       var band4 = function (n) { return Math.floor(n / 4) % 2 === 0; };
       var warpCol = function (c) { return c % 16 === 7 ? P.aw : (band4(c) ? P.dark : P.light); };
       var weftCol = function (rr) { return rr % 16 === 7 ? P.af : (band4(rr) ? P.dark : P.light); };
       var tw = pitch * 0.8, tOff = (pitch - tw) / 2;
 
-      /* cells that the central erase will delete anyway are never drawn */
-      var skip = !this.band;
+      /* cells that the edges variant's central erase deletes are never drawn */
+      var skip = this.edges;
       var sk0 = this.eraseX0, sk1 = this.eraseX1;
 
       ctx.save();
       ctx.translate(0, -off);
-      var yMin = off - pitch * 2, yMax = off + H + pitch * 2;
+      if (horiz) {
+        /* (vx, vy) → (vy, SH − vx): virtual y becomes the real x axis */
+        ctx.translate(0, SH);
+        ctx.rotate(-Math.PI / 2);
+      }
 
-      /* warp threads (vertical), staggered descent */
+      /* visible window along the progression axis, in virtual coords */
+      var yMin = horiz ? -pitch * 2 : off - pitch * 2;
+      var yMax = horiz ? PX + pitch * 2 : off + H + pitch * 2;
+
+      /* warp threads, staggered as they are dressed onto the loom */
       for (var c = 0; c < cols; c++) {
         var x = c * pitch;
         if (skip && x >= sk0 && x + pitch <= sk1) { continue; }
         var a = easeOut(clamp((warpP - (c / cols) * 0.55) / 0.45, 0, 1));
         if (a <= 0) { continue; }
-        var len = (SH + pitch * 2) * a;
+        var len = (PX + pitch * 2) * a;
         var y0 = Math.max(0, yMin), y1 = Math.min(len, yMax);
         if (y1 <= y0) { continue; }
         ctx.globalAlpha = 0.5 + 0.5 * a;
@@ -312,7 +376,7 @@
 
         /* shuttle + live weft on the row in progress */
         if (isCur && !reduced && weaveP > 0.001 && weaveP < 0.999 && y > yMin && y < yMax) {
-          var xs = (ltr ? done : 1 - done) * W;
+          var xs = (ltr ? done : 1 - done) * AX;
           var ys = y + pitch / 2 + (amp ? amp * Math.sin(xs * freq + ph) : 0);
           ctx.strokeStyle = wcol;
           ctx.lineWidth = tw * 0.5;
@@ -343,14 +407,14 @@
 
       /* reed / beater bar riding just ahead of the woven edge */
       if (!reduced && weaveP > 0.001 && weaveP < 0.999) {
-        var fy = weaveP * SH + pitch * 1.4;
+        var fy = weaveP * PX + pitch * 1.4;
         if (fy > yMin && fy < yMax) {
           var rg = ctx.createLinearGradient(0, fy, 0, fy + pitch * 1.3);
           rg.addColorStop(0, P.woodHi);
           rg.addColorStop(1, P.woodLo);
           ctx.globalAlpha = P.reedA;
           ctx.fillStyle = rg;
-          ctx.fillRect(0, fy, W, pitch * 1.3);
+          ctx.fillRect(0, fy, AX, pitch * 1.3);
           ctx.fillStyle = P.teeth;
           for (var ct = 0; ct < cols; ct += 2) {
             var xt = ct * pitch + pitch * 0.9;
@@ -365,12 +429,12 @@
       /* band finish — drape shading, fibre noise, vignette (screen space) */
       if (drape > 0.01) {
         for (i = 0; i < 96; i++) {
-          var xd = i / 96 * W;
-          var v = Math.sin((xd - W / 2) / (W * 0.5) * Math.PI * 3 + ph);
+          var v = Math.sin((i / 96 - 0.5) * Math.PI * 3 + ph);
           ctx.fillStyle = v > 0
             ? 'rgba(255,244,224,' + (v * 0.08 * drape).toFixed(3) + ')'
             : 'rgba(10,7,5,' + (-v * 0.18 * drape).toFixed(3) + ')';
-          ctx.fillRect(xd, 0, W / 96 + 1, H);
+          if (horiz) { ctx.fillRect(0, i / 96 * H, W, H / 96 + 1); }
+          else { ctx.fillRect(i / 96 * W, 0, W / 96 + 1, H); }
         }
       }
       if (P.noise) {
@@ -393,42 +457,55 @@
         ctx.fillRect(0, 0, W, H);
       }
 
-      /* edges finish — erase the text column and feather every boundary */
+      /* backdrop finish — knock the whole cloth back so content floats on it */
+      if (this.backdrop) {
+        ctx.save();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.globalAlpha = 1 - BACKDROP;
+        ctx.fillStyle = '#000';
+        ctx.fillRect(0, 0, W, H);
+        ctx.restore();
+      }
+
+      /* edges + backdrop finish — feather the boundaries (screen space) */
       if (!this.band) {
         ctx.save();
         ctx.globalCompositeOperation = 'destination-out';
 
-        var hg = ctx.createLinearGradient(0, 0, W, 0);
-        if (this.showL) {
-          hg.addColorStop(clamp((this.eraseX0 - FADE) / W, 0, 1), 'rgba(0,0,0,0)');
-          hg.addColorStop(clamp(this.eraseX0 / W, 0, 1), 'rgba(0,0,0,1)');
-        } else {
-          hg.addColorStop(0, 'rgba(0,0,0,1)');
+        if (this.edges) {
+          var hg = ctx.createLinearGradient(0, 0, W, 0);
+          if (this.showL) {
+            hg.addColorStop(clamp((this.eraseX0 - FADE) / W, 0, 1), 'rgba(0,0,0,0)');
+            hg.addColorStop(clamp(this.eraseX0 / W, 0, 1), 'rgba(0,0,0,1)');
+          } else {
+            hg.addColorStop(0, 'rgba(0,0,0,1)');
+          }
+          if (this.showR) {
+            hg.addColorStop(clamp(this.eraseX1 / W, 0, 1), 'rgba(0,0,0,1)');
+            hg.addColorStop(clamp((this.eraseX1 + FADE) / W, 0, 1), 'rgba(0,0,0,0)');
+          } else {
+            hg.addColorStop(1, 'rgba(0,0,0,1)');
+          }
+          ctx.fillStyle = hg;
+          ctx.fillRect(0, 0, W, H);
         }
-        if (this.showR) {
-          hg.addColorStop(clamp(this.eraseX1 / W, 0, 1), 'rgba(0,0,0,1)');
-          hg.addColorStop(clamp((this.eraseX1 + FADE) / W, 0, 1), 'rgba(0,0,0,0)');
-        } else {
-          hg.addColorStop(1, 'rgba(0,0,0,1)');
-        }
-        ctx.fillStyle = hg;
-        ctx.fillRect(0, 0, W, H);
 
+        var fv = Math.min(FADE_V, SH * 0.2);
         var topY = -off;                    /* section top, canvas coords */
-        if (topY + FADE_V > 0) {
-          var tg = ctx.createLinearGradient(0, topY, 0, topY + FADE_V);
+        if (topY + fv > 0) {
+          var tg = ctx.createLinearGradient(0, topY, 0, topY + fv);
           tg.addColorStop(0, 'rgba(0,0,0,1)');
           tg.addColorStop(1, 'rgba(0,0,0,0)');
           ctx.fillStyle = tg;
-          ctx.fillRect(0, Math.max(0, topY), W, Math.min(H, topY + FADE_V) - Math.max(0, topY));
+          ctx.fillRect(0, Math.max(0, topY), W, Math.min(H, topY + fv) - Math.max(0, topY));
         }
         var botY = SH - off;                /* section bottom, canvas coords */
-        if (botY - FADE_V < H) {
-          var bg = ctx.createLinearGradient(0, botY - FADE_V, 0, botY);
+        if (botY - fv < H) {
+          var bg = ctx.createLinearGradient(0, botY - fv, 0, botY);
           bg.addColorStop(0, 'rgba(0,0,0,0)');
           bg.addColorStop(1, 'rgba(0,0,0,1)');
           ctx.fillStyle = bg;
-          ctx.fillRect(0, Math.max(0, botY - FADE_V), W, Math.min(H, botY) - Math.max(0, botY - FADE_V));
+          ctx.fillRect(0, Math.max(0, botY - fv), W, Math.min(H, botY) - Math.max(0, botY - fv));
         }
         ctx.restore();
       }
