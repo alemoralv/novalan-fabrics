@@ -1922,3 +1922,51 @@ html:not(.nv-js) .nv-lang:not(.nv-lang--block) .nv-lang__item.is-current { paddi
 @media (max-width: 900px) {
   .nv-js .nv-header .nv-lang:has(.nv-lang__toggle) { display: none; }
 }
+
+
+/* =============================================================================
+   30  WEAVE CANVAS -- <nv-weave>, scroll-driven loom backdrop (weave.js)
+   The custom element paints wool cloth weaving itself as the visitor scrolls,
+   recoloured with the design-system palette. Decorative only: without
+   JavaScript it renders nothing, and the band's ink background or the page's
+   paper stand in. weave.js measures the section's text and erases the cloth
+   behind it -- these rules only place the canvas.
+   ============================================================================= */
+
+nv-weave { display: block; pointer-events: none; }
+nv-weave canvas { display: block; }
+
+/* host section: the canvas paints behind the content, never above it */
+.nv-section--weave { position: relative; isolation: isolate; }
+
+/* the edges canvas bleeds to the viewport so the threads reach the page
+   margins outside the container; main clips the scrollbar-width excess */
+main:has(> .nv-section--weave) { overflow-x: clip; }
+
+.nv-weave--edges {
+  position: absolute;
+  inset-block: 0;
+  left: calc(50% - 50vw);
+  width: 100vw;
+  z-index: -1;
+  /* clip, not hidden: no scrollport is created, so the sticky canvas inside
+     keeps the viewport as its reference and only ever paints one screenful */
+  overflow: clip;
+}
+.nv-weave--edges canvas {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+}
+
+/* the band canvas fills .nv-band__media, behind the veil and protect layers */
+.nv-weave--band { position: absolute; inset: 0; }
+.nv-weave--band canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+/* below the tablet breakpoint the margins can never fit a strip of cloth;
+   weave.js re-measures and hides itself anyway, this just skips the work */
+@media (max-width: 900px) {
+  .nv-weave--edges { display: none; }
+}

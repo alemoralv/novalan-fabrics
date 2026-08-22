@@ -24,6 +24,7 @@ site/                     el sitio publicado
     css/site.css          la única hoja de estilo propia
     css/tokens/           tokens del sistema de diseño Novalan
     js/site.js            todo el JavaScript, sin dependencias
+    js/weave.js           <nv-weave>: telar animado por scroll (canvas), decorativo
     fonts/                Bodoni Moda, Archivo, Pinyon Script (OFL 1.1), servidas localmente
     img/fabric/           las 13 familias de tela, en WebP y JPEG, a 1600 y 800 px
     img/photo/            fotografía de planta

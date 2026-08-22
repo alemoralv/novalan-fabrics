@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="" />
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,300;6..72,400;6..72,500&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet" />
+<style>
+  html, body { margin: 0; padding: 0; background: #17140f; }
+  body { -webkit-font-smoothing: antialiased; }
+  a { color: #b3873a; text-decoration: none; }
+  a:hover { color: #d8ab5c; }
+</style>
+</helmet>
+<div style="background:#17140f;font-family:'Newsreader',Georgia,serif;color:#f2ece1">
+  <header style="display:flex;align-items:baseline;justify-content:space-between;gap:24px;padding:34px clamp(20px,6vw,96px) 0">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(242,236,225,0.5)">Novalan · Tulancingo, Hidalgo</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:rgba(242,236,225,0.35)">Desplaza para tejer</span>
+  </header>
+
+  <section style="min-height:78vh;display:flex;flex-direction:column;justify-content:center;gap:28px;padding:0 clamp(20px,6vw,96px) 12vh;max-width:1180px">
+    <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.24em;text-transform:uppercase;color:#b3873a">Procesos · Tejido</p>
+    <h1 style="margin:0;font-size:clamp(38px,6.4vw,104px);font-weight:300;line-height:0.98;letter-spacing:-0.025em;text-wrap:balance">Del hilo a la tela,<br />pasada por pasada</h1>
+    <p style="margin:0;max-width:46ch;font-size:clamp(17px,1.45vw,23px);line-height:1.55;color:rgba(242,236,225,0.72);text-wrap:pretty">Cada metro de tela de lana empieza con miles de hilos tensados en el telar. Lo que sigue es el cruce paciente de la trama, hasta que el dibujo aparece.</p>
+  </section>
+
+  <x-import component-from-global-scope="novalan-weave" from="./novalan-weave.js" colorway="{{ colorway }}" density="{{ density }}" captions="{{ captionsAttr }}" scroll="{{ scrollLength }}" hint-size="100%,420vh"></x-import>
+
+  <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(28px,4vw,64px);padding:clamp(80px,12vh,160px) clamp(20px,6vw,96px)">
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#b3873a">Ligamento</p>
+      <p style="margin:0;font-size:19px;line-height:1.5;color:rgba(242,236,225,0.74)">Sarga 2/2 con bandas de cuatro hilos: la construcción exacta de la pata de gallo.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#b3873a">Integración vertical</p>
+      <p style="margin:0;font-size:19px;line-height:1.5;color:rgba(242,236,225,0.74)">Más de 100,000 m² de instalaciones productivas, de la materia prima al producto terminado.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:#b3873a">Desde 1847</p>
+      <p style="margin:0;font-size:19px;line-height:1.5;color:rgba(242,236,225,0.74)">San Ildefonso y Novalan: 170 años tejiendo lana en el continente americano.</p>
+    </div>
+  </section>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;colorway&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;oxido&quot;,&quot;carbon&quot;,&quot;ocre&quot;],&quot;default&quot;:&quot;oxido&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Tejido&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:40,&quot;max&quot;:100,&quot;step&quot;:4,&quot;default&quot;:64,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Tejido&quot;},&quot;captions&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Tejido&quot;},&quot;scrollLength&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;min&quot;:3,&quot;max&quot;:6,&quot;step&quot;:0.5,&quot;default&quot;:4,&quot;unit&quot;:&quot;×vh&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Tejido&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      colorway: this.props.colorway ?? 'oxido',
+      density: String(this.props.density ?? 64),
+      captionsAttr: (this.props.captions ?? true) ? 'on' : 'off',
+      scrollLength: String(this.props.scrollLength ?? 4)
+    };
+  }
+}
+
+</script>
+</body>
+</html>
