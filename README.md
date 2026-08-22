@@ -5,7 +5,7 @@ mismo contenido, diseño nuevo, y versiones reales en varios idiomas.
 
 Novalan y San Ildefonso Fábrica de Tejidos de Lana forman un grupo lanero y textil con más de
 170 años de historia, en Tulancingo, Hidalgo. San Ildefonso abrió en 1847 y es la fábrica textil
-más antigua del continente americano; Novalan fue fundada por la Familia Morera en 1983.
+más antigua del continente americano; Novalan fue fundada en 1983 por la familia propietaria del grupo.
 
 ## Ver el sitio
 

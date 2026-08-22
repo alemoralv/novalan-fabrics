@@ -18,6 +18,12 @@ Approved copy-edits (already applied in the text below):
   English page. Corrected here so ES matches EN: **peinada = worsted, cardada = woolen**.
 - The original language menu offered Italiano / Français / 日本語 / 中文 / 한국어, but every one of
   those links pointed at the English page. Only ES and EN exist, so only ES and EN are offered.
+- **The family surname is removed at the owners' request.** The history stays exactly as it is —
+  the 1847 founding, the 1977 acquisition, the 1983 founding of Novalan — but the family is never
+  named. `Don Juan Morera` → `sus actuales propietarios` / `its current owners`; `la Familia
+  Morera` → `la familia propietaria` / `the owning family`. **The string "Morera" must not appear
+  anywhere on the site, in any language, in body copy, headings, alt text, meta descriptions or
+  structured data.**
 
 ---
 
@@ -34,8 +40,8 @@ Approved copy-edits (already applied in the text below):
 | Number | EN label | ES label | Source |
 | --- | --- | --- | --- |
 | 1847 | San Ildefonso established | San Ildefonso inicia operaciones | home |
-| 1977 | Acquired by Mr. Juan Morera | Adquirida por Don Juan Morera | home |
-| 1983 | Novalan founded by the Morera family | Novalan fundada por la Familia Morera | home |
+| 1977 | Acquired by its current owners | Adquirida por sus actuales propietarios | home |
+| 1983 | Novalan founded by the owning family | Novalan fundada por la familia propietaria | home |
 | 170+ | years in the wool and textile industry | años en la industria lanera y textil | home |
 | 130–600 g/m² | fabric weight range | rango de peso de tela | products |
 | 1,000,000+ sq ft (EN) / 100,000+ m² (ES) | production facilities | instalaciones productivas | home — **use the figure native to each language, do not convert** |
@@ -50,9 +56,9 @@ Approved copy-edits (already applied in the text below):
 >
 > More than 170 years in the Mexican and International wool and textile industry back-us up. Currently, we are proud to be placed as one of the biggest wool mills and one of the biggest producers of wool fabric in America.
 >
-> San Ildefonso, is one of the 10 most antique companies in Mexico and the oldest textile factory in America. It was established in 1847 and was acquired by Mr. Juan Morera in 1977, originally producing wool fabrics and polyester/wool blends to satisfy the men's suiting domestic market. Currently, it produces the finest worsted wool fabrics in America.
+> San Ildefonso, is one of the 10 most antique companies in Mexico and the oldest textile factory in America. It was established in 1847 and was acquired by its current owners in 1977, originally producing wool fabrics and polyester/wool blends to satisfy the men's suiting domestic market. Currently, it produces the finest worsted wool fabrics in America.
 >
-> Novalan was founded in 1983 by the Morera Family with a direction in sustainability, in its origins it focused on the production of 100% woolen spun fabrics from reprocessed and recycled materials. Later on, the business evolved expanding its production to worsted and woolen products.
+> Novalan was founded in 1983 by the owning family with a direction in sustainability, in its origins it focused on the production of 100% woolen spun fabrics from reprocessed and recycled materials. Later on, the business evolved expanding its production to worsted and woolen products.
 >
 > Thanks to new investments, a strong leadership, and to the work of highly committed personnel with producing with the highest quality and under international standards, the company expanded into new products: wool coats, flannels, casual and sport jackets, fine summer fabrics, besides blends with cashmere and silk, among others.
 >
@@ -71,9 +77,9 @@ Button: **Corporate Video**
 >
 > Más de 170 años en el mercado lanero y textil mexicano e internacional nos respaldan. Actualmente, nos enorgullece ser uno de los más grandes productores de telas de lana en todo el Continente Americano.
 >
-> San Ildefonso es una de las 10 empresas más antiguas de México y la empresa textil más antigua en el continente americano. Inició sus operaciones en 1847, siendo adquirida por Don Juan Morera en 1977, originalmente produciendo telas de lana y poliéster-lana para satisfacer la demanda de telas para trajes de hombre del mercado mexicano. Actualmente, produce las telas de lana más finas de América.
+> San Ildefonso es una de las 10 empresas más antiguas de México y la empresa textil más antigua en el continente americano. Inició sus operaciones en 1847, siendo adquirida por sus actuales propietarios en 1977, originalmente produciendo telas de lana y poliéster-lana para satisfacer la demanda de telas para trajes de hombre del mercado mexicano. Actualmente, produce las telas de lana más finas de América.
 >
-> Novalan, fundada en 1983 por la Familia Morera, con una orientación total en la sustentabilidad, se enfocó en sus orígenes en la fabricación de telas de reciclados de lana. Posteriormente, el negocio evolucionó ampliando su línea a productos peinados y cardados.
+> Novalan, fundada en 1983 por la familia propietaria, con una orientación total en la sustentabilidad, se enfocó en sus orígenes en la fabricación de telas de reciclados de lana. Posteriormente, el negocio evolucionó ampliando su línea a productos peinados y cardados.
 >
 > Gracias a nuevas inversiones, a un fuerte equipo de liderazgo, y al trabajo de personal altamente comprometido en producir con la mejor calidad bajo estándares internacionales, se incursionó en productos tales como: abrigos de lana, franelas, chamarras casuales y deportivas, telas finas para verano, además de mezclas con lana de cashmere y seda entre otras.
 >

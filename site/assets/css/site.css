@@ -86,6 +86,14 @@
                           box-shadow var(--dur) var(--ease-standard);
 }
 
+/* --site-label-fg above resolves --text-secondary once, at :root, and every
+   element then inherits that finished paper colour — redefining
+   --text-secondary further down the tree cannot reach back into it. So the ink
+   bands were painting their micro-labels #2A2723 on #0B0B0B, roughly 1.4:1.
+   Re-declaring the property inside the ink scope makes it resolve again
+   against the inverted token, which is what the comment above intended. */
+[data-nv-theme="ink"] { --site-label-fg: var(--text-secondary); }
+
 html { scroll-behavior: smooth; }
 
 /* every in-page anchor clears the sticky header */
@@ -1120,6 +1128,12 @@ a.nv-tag:hover, button.nv-tag:hover { background: var(--state-hover-surface); co
   isolation: isolate;
 }
 .nv-band--ink { background: var(--nv-ink-900); }
+
+/* data-nv-theme="ink" only redefines the tokens; it does not repaint `color`,
+   which is inherited from <body> as a resolved ink value. Without this the
+   band's own heading (.nv-cta__title sets no colour of its own) renders ink on
+   ink and disappears. .nv-footer carries the same line for the same reason. */
+.nv-band[data-nv-theme="ink"] { color: var(--text-primary); }
 
 .nv-band--image {
   display: grid;
