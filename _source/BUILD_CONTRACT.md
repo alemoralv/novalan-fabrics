@@ -118,10 +118,11 @@ Then a hairline and a bottom row: copyright left, `Tulancingo, Hidalgo · Méxic
 ### Section grammar
 
 Every content section opens with a **labelled rule**: a micro-label, a 1 px hairline that flexes to
-fill the row, and (where the section is a numbered sequence) a mono index on the right.
+fill the row. **No section counter.** Numbered "01 / 06" indices were removed at the owners'
+request — never add one back, in any language.
 
 ```html
-<div class="nv-rule" role="presentation"><span class="nv-rule__label">Historia</span><i></i><span class="nv-rule__index">01 / 05</span></div>
+<div class="nv-rule" role="presentation"><span class="nv-rule__label">Historia</span><i></i></div>
 ```
 
 Sections are separated by `--section-y` (96 px; 64 px below 900 px). Prose is capped at

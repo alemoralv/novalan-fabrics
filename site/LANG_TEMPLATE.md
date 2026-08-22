@@ -563,7 +563,7 @@ JS adds `body.nv-no-scroll` while it is open.
 ### Components
 | Class | Does | Modifiers |
 | --- | --- | --- |
-| `.nv-rule` | labelled hairline; children `.nv-rule__label`, `<i>` or `.nv-rule__line`, `.nv-rule__index` | `--accent`, `--strong` |
+| `.nv-rule` | labelled hairline; children `.nv-rule__label` and `<i>` (or `.nv-rule__line`). **Never emit `.nv-rule__index`** — the 01 / 06 counters were removed at the owners' request and the class no longer renders | `--accent`, `--strong` |
 | `.nv-btn` | 44 px square control, 11 px uppercase; press = `opacity:.86` | `--ink`, `--accent`, `--secondary`, `--ghost`, `--link`, `--sm` (32 px), `--lg` (52 px), `--block` |
 | `.nv-card` | white, 1 px hairline, square, no shadow. Children `.nv-card__body`, `.nv-card__title`, `.nv-card__meta`, `.nv-card__link` | `--interactive`, `--flush` |
 | `.nv-figure` | `<figure>`; holds `.nv-figure__frame`, `.nv-figure__img`, `.nv-figure__caption` | ratio: `--4x5` `--1x1` `--3x2` `--16x10` (default) `--19x10` `--21x9`; `--hover` |

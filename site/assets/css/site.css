@@ -760,14 +760,9 @@ main:has(> .nv-band--ink:last-child) + .nv-footer { margin-block-start: 0; }
   color: var(--site-label-fg);
   white-space: nowrap;
 }
-.nv-rule__index {
-  flex: none;
-  font-family: var(--font-mono);
-  font-size: var(--fs-label-lg);
-  font-variant-numeric: tabular-nums;
-  color: var(--site-label-fg);
-  white-space: nowrap;
-}
+/* Section counters (01 / 06) were removed from the markup at the owners' request.
+   This rule stays only as a guard: if a counter survives anywhere, it does not render. */
+.nv-rule__index { display: none; }
 .nv-rule--accent > i, .nv-rule--accent .nv-rule__line { background: var(--border-accent); }
 .nv-rule--strong > i, .nv-rule--strong .nv-rule__line { background: var(--border-hairline-strong); }
 
@@ -1484,7 +1479,6 @@ a.nv-tag:hover, button.nv-tag:hover { background: var(--state-hover-surface); co
   .nv-footer__inner { grid-template-columns: minmax(0, 1fr); }
   .nv-footer__bottom { flex-direction: column; align-items: flex-start; }
 
-  .nv-rule__index { display: none; }
 
   .nv-spec__row { display: grid; gap: var(--space-1); }
   .nv-spec__value { text-align: left; }
