@@ -187,6 +187,9 @@ Actions — EN (the live EN page repeats two of these verbatim across two blocks
 - Recycling textile materials and acquiring certified raw materials.
 
 Actions — ES
+- Generando empleo en instalaciones limpias y seguras, con un compromiso con la población de nuestra
+  región. *(La página ES original no traía esta acción; la EN sí. Se armoniza para que los siete
+  idiomas digan lo mismo — el hecho viene de la propia página inglesa del sitio, no es invención.)*
 - Manteniendo instalaciones limpias y seguras para nuestro personal.
 - San Ildefonso fue la primera empresa de la industria de la lana en establecer una planta de tratamiento de agua hace más de 50 años.
 - En Novalan hemos instalado una planta de tratamiento de agua con capacidad suficiente para tratar y reciclar el agua que se usa en los procesos de producción.

@@ -43,8 +43,31 @@ Novalan Design System (1)/   el sistema de diseño del que sale el lenguaje visu
 ## Idiomas
 
 El sitio original ofrecía siete idiomas en su menú, pero seis de esos enlaces llevaban a la misma
-página en inglés. Aquí cada idioma existe de verdad. El español es el idioma por defecto y vive en
-la raíz; los demás viven en su carpeta.
+página en inglés. **Aquí los siete existen de verdad**: 35 páginas, cinco por idioma.
+
+| Idioma | Carpeta | `lang` |
+| --- | --- | --- |
+| Español de México | raíz | `es-MX` |
+| English | `en/` | `en` |
+| Italiano | `it/` | `it` |
+| Français | `fr/` | `fr` |
+| 日本語 | `ja/` | `ja` |
+| 中文 | `zh/` | `zh-Hans` |
+| 한국어 | `ko/` | `ko` |
+
+Cada página enlaza a su equivalente en los otros seis idiomas —nunca a la portada— y declara los
+ocho `hreflang` correspondientes.
+
+No son traducciones automáticas: el vocabulario textil sigue un glosario fijado en
+`_source/I18N.md`, de modo que *worsted* es *peinada / pettinato / peigné / 梳毛 / 精纺 / 소모* y
+*woolen* es *cardada / cardato / cardé / 紡毛 / 粗纺 / 방모*. La razón social, la dirección, los
+teléfonos y todas las cifras quedan sin traducir en los siete idiomas.
+
+Japonés, chino y coreano usan tipografía del sistema (Mincho, Songti, Myeongjo) activada por
+`:lang()`, con Bodoni y Archivo al frente de cada pila para que los números y los nombres propios
+en alfabeto latino conserven la tipografía de la marca dentro del texto CJK. También cambian el
+interlineado, el tracking y el corte de línea, porque las reglas tipográficas latinas destrozan un
+párrafo en kanji.
 
 ## Qué cambió respecto al sitio original
 
@@ -52,7 +75,10 @@ la raíz; los demás viven en su carpeta.
 está registrado en `_source/CONTENT.md`. No hay clientes, certificaciones, plazos ni testimonios
 que no estuvieran ya publicados.
 
-Sí se corrigieron tres errores del sitio original, todos documentados:
+A petición de los dueños, la familia propietaria no se nombra: la historia se conserva completa
+—1847, la adquisición de 1977, la fundación de Novalan en 1983— pero sin el apellido.
+
+Sí se corrigieron cuatro errores del sitio original, todos documentados:
 
 1. La página de productos en español intercambiaba **peinada** (worsted) y **cardada** (woolen)
    respecto a su propia versión en inglés.
@@ -60,6 +86,8 @@ Sí se corrigieron tres errores del sitio original, todos documentados:
    *"looking forward to protect and the people of communities in which we operate"* — y repetía la
    sección ambiental dos veces con viñetas duplicadas.
 3. *San Idelfonso* → *San Ildefonso* en la página de inicio en español.
+4. La página española de *Quiénes Somos* omitía una de las cinco acciones ambientales que sí
+   traía la inglesa. Los siete idiomas dicen ahora lo mismo.
 
 **Diseño.** El sitio anterior usaba una plantilla de 2014 con barra lateral fija y no era
 responsivo. Ahora:
